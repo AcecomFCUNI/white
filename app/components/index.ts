@@ -1,0 +1,6 @@
+export * from './CountItem'
+export * from './Feature'
+export * from './MerchItem'
+export * from './NewItem'
+export * from './Partner'
+export * from './Testimonial'
