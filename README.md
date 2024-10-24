@@ -1,4 +1,4 @@
-# White project
+# Chasqui II project
 
 This is the project for Chasqui II.
 
