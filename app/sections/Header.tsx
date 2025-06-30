@@ -1,6 +1,7 @@
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-scroll'
+import { Link as RemixLink } from '@remix-run/react'
 
 const Header = () => {
   const [headerScrolled, setHeaderScrolled] = useState(false)
@@ -68,6 +69,27 @@ const Header = () => {
             ))}
           </ul>
         </nav>
+        
+        {/* Auth Links */}
+        <div className={`
+          ${mobileNavActive ? 'block' : 'hidden'} 
+          md:flex md:items-center md:space-x-4
+          transition-opacity duration-300 ease-in-out
+          ${headerScrolled ? 'opacity-0 invisible' : 'opacity-100 visible'}
+        `}>
+          <RemixLink
+            to="/login"
+            className="text-gray-300 hover:text-white text-sm font-semibold transition duration-300 ease-in-out"
+          >
+            Iniciar Sesión
+          </RemixLink>
+          <RemixLink
+            to="/register"
+            className="bg-[#db013a] hover:bg-[#6f001c] text-white px-4 py-2 rounded-md text-sm font-semibold transition duration-300 ease-in-out"
+          >
+            Registrarse
+          </RemixLink>
+        </div>
         <button
           className={`md:hidden text-white focus:outline-none 
             transition-opacity duration-300 ease-in-out
