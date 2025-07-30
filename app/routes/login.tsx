@@ -1,7 +1,18 @@
-import type { MetaFunction } from '@remix-run/node'
-import { Link } from '@remix-run/react'
+import { MetaFunction, ActionFunctionArgs, json, redirect } from '@remix-run/node'
+import { Link, Form, useActionData, useNavigation, useSearchParams } from '@remix-run/react'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
+import { createServerClient } from '@supabase/auth-helpers-remix'
+
+
+type ActionData = {
+  errors?: {
+    email?: string;
+    password?: string;
+    general?: string;
+  };
+  success: boolean;
+};
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,31 +21,157 @@ export const meta: MetaFunction = () => {
   ]
 }
 
+const validator = (data: FormData) => {
+  const email = data.get('email');
+  const password = data.get('password');
+  const errors: { email?: string; password?: string; general?: string } = {};
+
+  if (typeof email !== 'string' || !email.includes('@')) {
+    errors.email = 'Email Invalido';
+  }
+
+  if (typeof password !== 'string' || password.length < 6) {
+    errors.password = 'La contraseña debe tener al menos 6 caracteres';
+  }
+
+  return errors;
+}
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+  const intent = formData.get('intent') as string;
+
+  // Debug: Verificar variables de entorno
+  console.log('SUPABASE_URL:', process.env.SUPABASE_URL ? 'SET' : 'NOT SET');
+  console.log('SUPABASE_ANON_KEY:', process.env.SUPABASE_ANON_KEY ? 'SET' : 'NOT SET');
+
+  if (intent !== 'login' && intent !== 'google') {
+    return json({
+      errors: { general: 'Tipo de login no soportado' },
+      success: false
+    });
+  }
+
+  if (intent === 'google') {
+    console.log('Google sign-in attempt');
+    try {
+      const response = new Response();
+      const supabaseClient = createServerClient(
+        process.env.SUPABASE_URL as string,
+        process.env.SUPABASE_ANON_KEY as string,
+        { request, response }
+      );
+
+      // Get the origin from the request
+      const url = new URL(request.url);
+      const origin = url.origin;
+
+      const { data, error } = await supabaseClient.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${origin}/auth/callback`
+        }
+      });
+
+      if (error) {
+        console.log('Supabase OAuth error:', error);
+        return json({ 
+          errors: { general: error.message },
+          success: false 
+        });
+      }
+
+      // For OAuth, we redirect to the provider's URL
+      if (data?.url) {
+        return redirect(data.url);
+      }
+
+      return json({ 
+        errors: { general: 'No se pudo iniciar el proceso de autenticación con Google' },
+        success: false 
+      });
+    } catch (error) {
+      console.error('Google OAuth error:', error);
+      return json({ 
+        errors: { general: `Error: ${error instanceof Error ? error.message : 'Error inesperado durante la autenticación con Google'}` },
+        success: false 
+      });
+    }
+  }
+
+  // Handle password login (intent === 'login')
+  const errors = validator(formData);
+  if (Object.keys(errors).length > 0) {
+    return json({ errors, success: false });
+  }
+
+  const email = formData.get('email') as string;
+  const password = formData.get('password') as string;
+
+  try {
+    const response = new Response();
+    const supabaseClient = createServerClient(
+      process.env.SUPABASE_URL as string,
+      process.env.SUPABASE_ANON_KEY as string,
+      { request, response }
+    );
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      console.log('Supabase error:', error);
+      return json({ 
+        errors: { general: error.message },
+        success: false 
+      });
+    }
+
+    if (data?.user) {
+      console.log('User logged in:', data.user);
+      return redirect('/', {
+        headers: response.headers,
+      }); // Redirigir después del login
+    }
+
+    return json({ 
+      errors: { general: 'Login failed' },
+      success: false 
+    });
+  } catch (error) {
+    console.error('Catch block error:', error);
+    return json({ 
+      errors: { general: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred'}` },
+      success: false 
+    });
+  }
+};
+
+
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  })
+  const actionData = useActionData<ActionData>();
+  const navigation = useNavigation();
+  const [searchParams] = useSearchParams()
+  const isSubmitting = navigation.state === "submitting";
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
+  // Get URL error parameters
+  const urlError = searchParams.get('error')
+  const getErrorMessage = (error: string | null) => {
+    switch (error) {
+      case 'auth_error':
+        return 'Error en la autenticación con Google. Inténtalo de nuevo.'
+      case 'callback_error':
+        return 'Error en el proceso de autenticación. Inténtalo de nuevo.'
+      case 'no_code':
+        return 'No se recibió el código de autenticación. Inténtalo de nuevo.'
+      default:
+        return null
+    }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle login logic here
-    console.log('Login attempt:', formData)
-  }
-
-  const handleGoogleSignIn = () => {
-    // Handle Google sign-in logic here
-    console.log('Google sign-in attempt')
-  }
 
   return (
     <div className="min-h-screen w-full relative" style={{ fontFamily: 'Montserrat, sans-serif' }}>
@@ -83,7 +220,21 @@ export default function Login() {
 
                 {/* Login Form */}
                 <div className="flex-1 flex flex-col justify-center">
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Display URL Errors */}
+                  {urlError && getErrorMessage(urlError) && (
+                    <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                      {getErrorMessage(urlError)}
+                    </div>
+                  )}
+                  
+                  {/* Display Action Errors */}
+                  {actionData?.errors?.general && (
+                    <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                      {actionData.errors.general}
+                    </div>
+                  )}
+
+                  <Form method="post" className="space-y-6">
                     
                     {/* Login Inputs */}
                     <div className="space-y-3">
@@ -101,11 +252,14 @@ export default function Login() {
                             name="email"
                             type="email"
                             required
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            className="w-full px-4 py-4 border border-[#CA093C] rounded-lg bg-white text-[16px] tracking-[0.5px] placeholder:text-[rgba(0,0,0,0.4)] focus:outline-none focus:ring-2 focus:ring-[#CA093C] focus:border-transparent transition duration-300"
+                            className={`w-full px-4 py-4 border rounded-lg bg-white text-[16px] tracking-[0.5px] placeholder:text-[rgba(0,0,0,0.4)] focus:outline-none focus:ring-2 focus:ring-[#CA093C] focus:border-transparent transition duration-300 ${
+                              actionData?.errors?.email ? 'border-red-500' : 'border-[#CA093C]'
+                            }`}
                             placeholder="example@email.com"
                           />
+                          {actionData?.errors?.email && (
+                            <p className="mt-1 text-sm text-red-600">{actionData.errors.email}</p>
+                          )}
                         </div>
                       </div>
 
@@ -123,9 +277,9 @@ export default function Login() {
                             name="password"
                             type={showPassword ? 'text' : 'password'}
                             required
-                            value={formData.password}
-                            onChange={handleInputChange}
-                            className="w-full px-4 py-4 border border-[#CA093C] rounded-lg bg-white text-[16px] tracking-[0.5px] placeholder:text-[rgba(0,0,0,0.4)] focus:outline-none focus:ring-2 focus:ring-[#CA093C] focus:border-transparent transition duration-300"
+                            className={`w-full px-4 py-4 border rounded-lg bg-white text-[16px] tracking-[0.5px] placeholder:text-[rgba(0,0,0,0.4)] focus:outline-none focus:ring-2 focus:ring-[#CA093C] focus:border-transparent transition duration-300 ${
+                              actionData?.errors?.password ? 'border-red-500' : 'border-[#CA093C]'
+                            }`}
                             placeholder="Ingresa tu contraseña"
                           />
                           <button
@@ -139,6 +293,9 @@ export default function Login() {
                               <EyeIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
                             )}
                           </button>
+                          {actionData?.errors?.password && (
+                            <p className="mt-1 text-sm text-red-600">{actionData.errors.password}</p>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -146,16 +303,21 @@ export default function Login() {
                     {/* Sign In Button */}
                     <button
                       type="submit"
-                      className="w-full bg-[#CA093C] text-white font-semibold text-[20px] py-4 px-8 rounded-lg shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] hover:bg-[#a0072f] transition duration-300 tracking-[0.5px]"
+                      name="intent"
+                      value="login"
+                      disabled={isSubmitting}
+                      className="w-full bg-[#CA093C] text-white font-semibold text-[20px] py-4 px-8 rounded-lg shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] hover:bg-[#a0072f] transition duration-300 tracking-[0.5px] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Ingresar
+                      {isSubmitting ? 'Iniciando sesión...' : 'Ingresar'}
                     </button>
 
                     {/* Google Sign In Button */}
                     <button
-                      type="button"
-                      onClick={handleGoogleSignIn}
-                      className="w-full bg-white border border-gray-200 text-[rgba(0,0,0,0.54)] font-medium text-[20px] py-4 px-4 rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] hover:bg-gray-50 transition duration-300 flex items-center justify-center gap-4"
+                      type="submit"
+                      name="intent"
+                      value="google"
+                      disabled={isSubmitting}
+                      className="w-full bg-white border border-gray-200 text-[rgba(0,0,0,0.54)] font-medium text-[20px] py-4 px-4 rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] hover:bg-gray-50 transition duration-300 flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <div className="w-6 h-6 flex items-center justify-center">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -165,9 +327,9 @@ export default function Login() {
                           <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                         </svg>
                       </div>
-                      <span>Ingresar con Google</span>
+                      <span>{isSubmitting ? 'Procesando...' : 'Ingresar con Google'}</span>
                     </button>
-                  </form>
+                  </Form>
                 </div>
 
                 {/* Sign Up Link */}
