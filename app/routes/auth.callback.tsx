@@ -1,40 +1,60 @@
+// This page handles the Oauth callback from Supabase
+// It processes the OAuth code and redirects the user accordingly
+// If the user is authenticated, they are redirected to the next page
+// If there is an error, they are redirected to the register page with an error message
 import { LoaderFunctionArgs, redirect } from '@remix-run/node'
 import { createServerClient } from '@supabase/auth-helpers-remix'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const response = new Response()
   const url = new URL(request.url)
-  const code = url.searchParams.get('code')
-
+  const code = url.searchParams.get('code') // The OAuth code from the query parameters
+  const next = url.searchParams.get('next') ?? '/' // Default redirect path if 'next' is not provided
+  
   if (code) {
     const supabaseClient = createServerClient(
-      process.env.SUPABASE_URL as string,
-      process.env.SUPABASE_ANON_KEY as string,
-      { request, response }
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_ANON_KEY!,
+      {
+        request,
+        response,
+      }
     )
 
     try {
-      const { data, error } = await supabaseClient.auth.exchangeCodeForSession(code)
+      // Supabase manages all automatically: Exchanging OAuth code for a token
+      const { data: { session }, error } = await supabaseClient.auth.getSession()
       
       if (error) {
-        console.error('Error exchanging code for session:', error)
+        console.error('Error getting session after OAuth:', error)
         return redirect('/register?error=auth_error')
       }
 
-      if (data?.session) {
-        console.log('User authenticated successfully:', data.user)
-        // Redirect to dashboard or home page after successful authentication
-        return redirect('/', {
+      if (session) {
+        console.log('User authenticated successfully via OAuth:', session.user.email)
+        return redirect(next, {
+          headers: response.headers,
+        })
+      } else {
+        // If there is no session, we try to refresh
+        const { data: { user }, error: userError } = await supabaseClient.auth.getUser()
+        
+        if (userError || !user) {
+          console.error('No user found after OAuth callback')
+          return redirect('/register?error=auth_error')
+        }
+        
+        console.log('User found, redirecting:', user.email)
+        return redirect(next, {
           headers: response.headers,
         })
       }
     } catch (error) {
-      console.error('Callback error:', error)
+      console.error('Callback processing error:', error)
       return redirect('/register?error=callback_error')
     }
   }
 
-  // If no code or authentication failed, redirect back to register
   return redirect('/register?error=no_code')
 }
 

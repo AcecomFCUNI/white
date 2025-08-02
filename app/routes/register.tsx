@@ -21,6 +21,7 @@ type ActionData = {
   success: boolean;
 };
 
+// Check if password is valid 
 const validator = (data: FormData) => {
   const email = data.get('email');
   const password = data.get('password');
@@ -41,23 +42,24 @@ const validator = (data: FormData) => {
 
   return errors;
 }
-
+// Action function to handle registration ( Google OAuth or password registration )
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const intent = formData.get('intent') as string;
 
-
-  // Checking environment variables
+  // Checking environment variables (debug)
   console.log('SUPABASE_URL:', process.env.SUPABASE_URL ? 'SET' : 'NOT SET');
   console.log('SUPABASE_ANON_KEY:', process.env.SUPABASE_ANON_KEY ? 'SET' : 'NOT SET');
 
+  // Type of registration not valid
   if (intent !== 'register' && intent !== 'google') {
     return json({
       errors: { general: 'Tipo de registro no soportado' },
       success: false
     });
   }
-  
+
+  // Google OAuth registration
   if (intent === 'google') {
     console.log('Google sign-up attempt');
     try {
@@ -75,7 +77,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       const { data, error } = await supabaseClient.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${origin}/auth/callback`
+          redirectTo: `${origin}/auth/callback`, // Redirect after successful authentication
+          queryParams: {
+            access_type: 'offline', // Request offline access to get a refresh token
+            prompt: 'consent' 
+          }
         }
       });
 
@@ -105,10 +111,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
   }
   
-  // Handle password registration (intent === 'register')
-  const errors = validator(formData);
-  if (Object.keys(errors).length > 0) {
-    return json({ errors, success: false });
+  // Password registration
+  if (intent === 'register') {
+    const errors = validator(formData);
+    if (Object.keys(errors).length > 0) {
+      return json({ errors, success: false });
+    }
   }
 
   const email = formData.get('email') as string;
@@ -158,7 +166,7 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const actionData = useActionData<ActionData>()
-  const navigation = useNavigation()
+  const navigation = useNavigation() 
   const [searchParams] = useSearchParams()
   const isSubmitting = navigation.state === 'submitting'
   
@@ -176,8 +184,6 @@ export default function Register() {
         return null
     }
   }
-
-  // No need for manual handlers with Remix!
 
   return (
     <div className="min-h-screen w-full relative" style={{ fontFamily: 'Montserrat, sans-serif' }}>
@@ -224,7 +230,24 @@ export default function Register() {
                   </div>
                 )}
 
-                <Form method="post" className="space-y-6">
+                <Form method="post" className="space-y-6" onSubmit={(e) => {
+                  const submitter = (e.nativeEvent as any).submitter;
+                  const intent = submitter?.value;
+                  
+                  // Only validate fields if it's a password registration
+                  if (intent === 'register') {
+                    const formData = new FormData(e.currentTarget);
+                    const email = formData.get('email') as string;
+                    const password = formData.get('password') as string;
+                    const confirmPassword = formData.get('confirmPassword') as string;
+                    
+                    if (!email || !password || !confirmPassword) {
+                      e.preventDefault();
+                      console.error('Todos los campos son obligatorios');
+                      return;
+                    }
+                  }
+                }}>
                   {/* Create Inputs */}
                   <div className="space-y-3">
                     {/* Email Field */}
@@ -240,7 +263,6 @@ export default function Register() {
                           id="email"
                           name="email"
                           type="email"
-                          required
                           className={`w-full px-4 py-4 border rounded-lg bg-white text-[16px] tracking-[0.5px] placeholder:text-[rgba(0,0,0,0.4)] focus:outline-none focus:ring-2 focus:ring-[#CA093C] focus:border-transparent transition duration-300 ${
                             actionData?.errors?.email ? 'border-red-500' : 'border-[#CA093C]'
                           }`}
@@ -265,7 +287,6 @@ export default function Register() {
                           id="password"
                           name="password"
                           type={showPassword ? 'text' : 'password'}
-                          required
                           className={`w-full px-4 py-4 border rounded-lg bg-white text-[16px] tracking-[0.5px] placeholder:text-[rgba(0,0,0,0.4)] focus:outline-none focus:ring-2 focus:ring-[#CA093C] focus:border-transparent transition duration-300 ${
                             actionData?.errors?.password ? 'border-red-500' : 'border-[#CA093C]'
                           }`}
@@ -301,7 +322,6 @@ export default function Register() {
                           id="confirmPassword"
                           name="confirmPassword"
                           type={showConfirmPassword ? 'text' : 'password'}
-                          required
                           className={`w-full px-4 py-4 border rounded-lg bg-white text-[16px] tracking-[0.5px] placeholder:text-[rgba(0,0,0,0.4)] focus:outline-none focus:ring-2 focus:ring-[#CA093C] focus:border-transparent transition duration-300 ${
                             actionData?.errors?.confirmPassword ? 'border-red-500' : 'border-[#CA093C]'
                           }`}

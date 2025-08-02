@@ -69,7 +69,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       const { data, error } = await supabaseClient.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${origin}/auth/callback`
+          redirectTo: `${origin}/auth/callback`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent'
+          }
         }
       });
 
@@ -100,9 +104,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   // Handle password login (intent === 'login')
-  const errors = validator(formData);
-  if (Object.keys(errors).length > 0) {
-    return json({ errors, success: false });
+  if (intent === 'login') {
+    const errors = validator(formData);
+    if (Object.keys(errors).length > 0) {
+      return json({ errors, success: false });
+    }
   }
 
   const email = formData.get('email') as string;
@@ -133,7 +139,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       console.log('User logged in:', data.user);
       return redirect('/', {
         headers: response.headers,
-      }); // Redirigir después del login
+      }); // Redirect on successful login
     }
 
     return json({ 
@@ -234,7 +240,22 @@ export default function Login() {
                     </div>
                   )}
 
-                  <Form method="post" className="space-y-6">
+                  <Form method="post" className="space-y-6" onSubmit={(e) => {
+                    const submitter = (e.nativeEvent as any).submitter;
+                    const intent = submitter?.value;
+                    
+                    // Solo validar campos si es login por contraseña
+                    if (intent === 'login') {
+                      const formData = new FormData(e.currentTarget);
+                      const email = formData.get('email') as string;
+                      const password = formData.get('password') as string;
+                      
+                      if (!email || !password) {
+                        e.preventDefault();
+                        return;
+                      }
+                    }
+                  }}>
                     
                     {/* Login Inputs */}
                     <div className="space-y-3">
@@ -251,7 +272,6 @@ export default function Login() {
                             id="email"
                             name="email"
                             type="email"
-                            required
                             className={`w-full px-4 py-4 border rounded-lg bg-white text-[16px] tracking-[0.5px] placeholder:text-[rgba(0,0,0,0.4)] focus:outline-none focus:ring-2 focus:ring-[#CA093C] focus:border-transparent transition duration-300 ${
                               actionData?.errors?.email ? 'border-red-500' : 'border-[#CA093C]'
                             }`}
@@ -276,7 +296,6 @@ export default function Login() {
                             id="password"
                             name="password"
                             type={showPassword ? 'text' : 'password'}
-                            required
                             className={`w-full px-4 py-4 border rounded-lg bg-white text-[16px] tracking-[0.5px] placeholder:text-[rgba(0,0,0,0.4)] focus:outline-none focus:ring-2 focus:ring-[#CA093C] focus:border-transparent transition duration-300 ${
                               actionData?.errors?.password ? 'border-red-500' : 'border-[#CA093C]'
                             }`}
