@@ -3,7 +3,11 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-scroll'
 import { Link as RemixLink } from '@remix-run/react'
 
-const Header = () => {
+interface HeaderProps {
+  user: any | null; 
+}
+
+const Header = ({ user }: HeaderProps) => {
   const [headerScrolled, setHeaderScrolled] = useState(false)
   const [mobileNavActive, setMobileNavActive] = useState(false)
 
@@ -33,6 +37,10 @@ const Header = () => {
     ['news', 'Noticias'],
     ['contact', 'Contacto']
   ]
+
+
+  // Debug temporal
+  console.log('Header render - User:', user)
 
   return (
     <header
@@ -77,6 +85,17 @@ const Header = () => {
           transition-opacity duration-300 ease-in-out
           ${headerScrolled ? 'opacity-0 invisible' : 'opacity-100 visible'}
         `}>
+          {user ? (
+            <form action="/logout" method="post">
+              <button
+                type="submit"
+                className="text-gray-300 hover:text-white text-sm font-semibold transition duration-300 ease-in-out"
+              >
+                Cerrar Sesión
+              </button>
+            </form>
+          ): 
+          <>
           <RemixLink
             to="/login"
             className="text-gray-300 hover:text-white text-sm font-semibold transition duration-300 ease-in-out"
@@ -89,6 +108,8 @@ const Header = () => {
           >
             Registrarse
           </RemixLink>
+          </>
+          }
         </div>
         <button
           className={`md:hidden text-white focus:outline-none 
