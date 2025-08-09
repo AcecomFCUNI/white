@@ -2,8 +2,11 @@ import React from 'react'
 import { Autoplay, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Testimonial } from '~/components'
+import getMembers from '~/database/queries/members'
 
 const Testimonials: React.FC = () => {
+  const members = getMembers() // Cuando se añada un backend, esto debe ir en un loader, aqui simplemente lo llamo como una funcion y luego lo renderizo directamente
+
   return (
     <section id="testimonials" className="py-16 relative testimonials overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
@@ -23,22 +26,16 @@ const Testimonials: React.FC = () => {
           }}
           className="mySwiper"
         >
-          <SwiperSlide>
-            <Testimonial
-              name="Raul Figueroa"
-              position="Director"
-              testimonial="Hay que darnos un espacio, para el espacio."
-              img="usuario"
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <Testimonial
-              name="Jairo Solano"
-              position="Coordinador"
-              testimonial="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-              img="usuario"
-            />
-          </SwiperSlide>
+          {members.map(member => (
+            <SwiperSlide key={member.id}>
+              <Testimonial
+                name={member.displayname}
+                position={member.position}
+                testimonial={member.phrase}
+                img={member.displayname}
+              />
+            </SwiperSlide>
+          ))}
           {/* Puedes añadir más SwiperSlides aquí según sea necesario */}
         </Swiper>
       </div>

@@ -1,4 +1,4 @@
-import { UserCircleIcon } from '@heroicons/react/24/solid'
+// import { UserCircleIcon } from '@heroicons/react/24/solid'
 import React from 'react'
 
 interface TestimonialProps {
@@ -11,12 +11,12 @@ interface TestimonialProps {
 const Testimonial: React.FC<TestimonialProps> = ({ name, position, testimonial, img }) => {
   return (
     <div className="flex flex-col items-center p-6 space-y-4 rounded-lg  h-full">
-      <img src={`/assets/img/directiva/${img}.jpg`} className="w-24 h-24 rounded-full border-4 border-red-400" alt={name} />
+      <img src={`/assets/img/directiva/${img}.webp`} className="w-28 h-28 rounded-full border-4 border-red-400" alt={name} />
       <div className="text-center">
         <h3 className="text-xl font-bold text-white">{name}</h3>
         <p className="text-sm text-gray-200">{position}</p>
       </div>
-      <UserCircleIcon className="w-8 h-8 text-red-400" />
+      {/* <UserCircleIcon className="w-8 h-8 text-red-400" /> */}
       <p className="text-center text-white italic">{testimonial}</p>
     </div>
   )
