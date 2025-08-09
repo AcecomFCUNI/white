@@ -4,7 +4,7 @@ import { createSupabaseServerClient } from '~/utils/supabase.server'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { supabase, headers } = createSupabaseServerClient(request)
-  
+
   try {
     console.log('=== LOGOUT ACTION START ===')
     await supabase.auth.signOut()
@@ -13,7 +13,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   } catch (error) {
     console.error('Error signing out:', error)
   }
-  
+
   return redirect('/', { headers })
 }
 

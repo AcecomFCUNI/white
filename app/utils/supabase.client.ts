@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-export function createSupabaseBrowserClient() {
+export function createSupabaseBrowserClient () {
   return createBrowserClient(
     window.ENV.SUPABASE_URL,
     window.ENV.SUPABASE_ANON_KEY

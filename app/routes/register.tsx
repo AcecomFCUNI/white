@@ -1,23 +1,23 @@
-import { ActionFunctionArgs, MetaFunction, redirect } from '@remix-run/node';
+import { ActionFunctionArgs, MetaFunction, redirect } from '@remix-run/node'
 import {
   json,
   Link,
   Form,
   useActionData,
   useNavigation,
-  useSearchParams,
-} from '@remix-run/react';
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
-import { createSupabaseServerClient } from '~/utils/supabase.server';
-import { createSupabaseBrowserClient } from '~/utils/supabase.client';
+  useSearchParams
+} from '@remix-run/react'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react'
+import { createSupabaseServerClient } from '~/utils/supabase.server'
+import { createSupabaseBrowserClient } from '~/utils/supabase.client'
 
 export const meta: MetaFunction = () => {
   return [
     { title: 'Registrarse - Chasqui II' },
-    { name: 'description', content: 'Crea tu cuenta en Chasqui II' },
-  ];
-};
+    { name: 'description', content: 'Crea tu cuenta en Chasqui II' }
+  ]
+}
 
 type ActionData = {
   errors?: {
@@ -31,83 +31,83 @@ type ActionData = {
 
 // Check if password is valid
 const validator = (data: FormData) => {
-  const email = data.get('email');
-  const password = data.get('password');
-  const confirmPassword = data.get('confirmPassword');
+  const email = data.get('email')
+  const password = data.get('password')
+  const confirmPassword = data.get('confirmPassword')
   const errors: {
     email?: string;
     password?: string;
     confirmPassword?: string;
     general?: string;
-  } = {};
+  } = {}
 
   if (typeof email !== 'string' || !email.includes('@')) {
-    errors.email = 'Email Invalido';
+    errors.email = 'Email Invalido'
   }
 
   if (typeof confirmPassword !== 'string' || confirmPassword !== password) {
-    errors.confirmPassword = 'Las contraseñas no coinciden';
+    errors.confirmPassword = 'Las contraseñas no coinciden'
   }
 
   if (typeof password !== 'string' || password.length < 6) {
-    errors.password = 'La contraseña debe tener al menos 6 caracteres';
+    errors.password = 'La contraseña debe tener al menos 6 caracteres'
   }
 
-  return errors;
-};
+  return errors
+}
 // Action function to handle registration ( Google OAuth or password registration )
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
-  const intent = formData.get('intent') as string;
-  const { supabase, headers } = createSupabaseServerClient(request);
+  const formData = await request.formData()
+  const intent = formData.get('intent') as string
+  const { supabase, headers } = createSupabaseServerClient(request)
 
   // Checking env variables
-  console.log('SUPABASE_URL:', process.env.SUPABASE_URL ? 'SET' : 'NOT SET');
+  console.log('SUPABASE_URL:', process.env.SUPABASE_URL ? 'SET' : 'NOT SET')
   console.log(
     'SUPABASE_ANON_KEY:',
     process.env.SUPABASE_ANON_KEY ? 'SET' : 'NOT SET'
-  );
+  )
 
   // Type of registration not valid
   if (intent !== 'register' && intent !== 'google') {
     return json({
       errors: { general: 'Tipo de registro no soportado' },
-      success: false,
-    });
+      success: false
+    })
   }
 
   // Password registration
   if (intent === 'register') {
-    const errors = validator(formData);
+    const errors = validator(formData)
     if (Object.keys(errors).length > 0) {
-      return json({ errors, success: false });
+      return json({ errors, success: false })
     }
   }
 
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
 
   try {
-    console.log('Attempting password sign-up for email:', email);
+    console.log('Attempting password sign-up for email:', email)
 
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${new URL(request.url).origin}/auth/callback`,
-      },
-    });
+        emailRedirectTo: `${new URL(request.url).origin}/auth/callback`
+      }
+    })
 
     if (error) {
-      console.log('Supabase error:', error);
+      console.log('Supabase error:', error)
       return json({
         errors: { general: error.message },
-        success: false,
-      });
+        success: false
+      })
     }
 
     if (data?.user) {
-      console.log('User registered:', data.user.email);
+      console.log('User registered:', data.user.email)
 
       // If the user needs email confirmation
       if (!data.session && data.user && !data.user.email_confirmed_at) {
@@ -115,82 +115,82 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           sucess: true,
           message:
             'Usuario registrado exitosamente. Por favor, verifica tu correo electrónico para completar el registro.',
-          user: data.user,
-        });
+          user: data.user
+        })
       }
 
       // If the user is already confirmed or no session is needed
       if (data.session) {
-        console.log('Session created:', data.session);
-        return redirect('/', { headers });
+        console.log('Session created:', data.session)
+        return redirect('/', { headers })
       }
-      return redirect('/login?message=registered');
+      return redirect('/login?message=registered')
     }
 
     return json({
       errors: { general: 'Registration failed' },
-      success: false,
-    });
+      success: false
+    })
   } catch (error) {
-    console.error('Catch block error:', error);
+    console.error('Catch block error:', error)
     return json({
       errors: {
         general: `Error: ${
           error instanceof Error
             ? error.message
             : 'An unexpected error occurred'
-        }`,
+        }`
       },
-      success: false,
-    });
+      success: false
+    })
   }
-};
+}
 
-export default function Register() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const actionData = useActionData<ActionData>();
-  const navigation = useNavigation();
-  const [searchParams] = useSearchParams();
-  const isSubmitting = navigation.state === 'submitting';
+export default function Register () {
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const actionData = useActionData<ActionData>()
+  const navigation = useNavigation()
+  const [searchParams] = useSearchParams()
+  const isSubmitting = navigation.state === 'submitting'
 
-  //The same as login
+  // The same as login
   const handleGoogleAuth = async () => {
     try {
-      const supabase = createSupabaseBrowserClient();
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const supabase = createSupabaseBrowserClient()
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
           queryParams: {
             access_type: 'offline',
-            prompt: 'select_account',
-          },
-        },
-      });
+            prompt: 'select_account'
+          }
+        }
+      })
 
       if (error) {
-        console.error('OAuth error:', error);
+        console.error('OAuth error:', error)
       }
     } catch (error) {
-      console.error('Client OAuth error:', error);
+      console.error('Client OAuth error:', error)
     }
-  };
+  }
 
   // Get URL error parameters
-  const urlError = searchParams.get('error');
+  const urlError = searchParams.get('error')
   const getErrorMessage = (error: string | null) => {
     switch (error) {
       case 'auth_error':
-        return 'Error en la autenticación con Google. Inténtalo de nuevo.';
+        return 'Error en la autenticación con Google. Inténtalo de nuevo.'
       case 'callback_error':
-        return 'Error en el proceso de autenticación. Inténtalo de nuevo.';
+        return 'Error en el proceso de autenticación. Inténtalo de nuevo.'
       case 'no_code':
-        return 'No se recibió el código de autenticación. Inténtalo de nuevo.';
+        return 'No se recibió el código de autenticación. Inténtalo de nuevo.'
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   return (
     <div
@@ -243,22 +243,21 @@ export default function Register() {
                   method="post"
                   className="space-y-6"
                   onSubmit={(e) => {
-                    const submitter = (e.nativeEvent as any).submitter;
-                    const intent = submitter?.value;
+                    const submitter = (e.nativeEvent as any).submitter
+                    const intent = submitter?.value
 
                     // Only validate fields if it's a password registration
                     if (intent === 'register') {
-                      const formData = new FormData(e.currentTarget);
-                      const email = formData.get('email') as string;
-                      const password = formData.get('password') as string;
+                      const formData = new FormData(e.currentTarget)
+                      const email = formData.get('email') as string
+                      const password = formData.get('password') as string
                       const confirmPassword = formData.get(
                         'confirmPassword'
-                      ) as string;
+                      ) as string
 
                       if (!email || !password || !confirmPassword) {
-                        e.preventDefault();
-                        console.error('Todos los campos son obligatorios');
-                        return;
+                        e.preventDefault()
+                        console.error('Todos los campos son obligatorios')
                       }
                     }
                   }}
@@ -318,11 +317,13 @@ export default function Register() {
                           className="absolute right-4 top-1/2 transform -translate-y-1/2"
                           onClick={() => setShowPassword(!showPassword)}
                         >
-                          {showPassword ? (
+                          {showPassword
+                            ? (
                             <EyeSlashIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                          ) : (
+                              )
+                            : (
                             <EyeIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                          )}
+                              )}
                         </button>
                         {actionData?.errors?.password && (
                           <p className="mt-1 text-sm text-red-600">
@@ -359,11 +360,13 @@ export default function Register() {
                             setShowConfirmPassword(!showConfirmPassword)
                           }
                         >
-                          {showConfirmPassword ? (
+                          {showConfirmPassword
+                            ? (
                             <EyeSlashIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                          ) : (
+                              )
+                            : (
                             <EyeIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                          )}
+                              )}
                         </button>
                         {actionData?.errors?.confirmPassword && (
                           <p className="mt-1 text-sm text-red-600">
@@ -467,5 +470,5 @@ export default function Register() {
         </Link>
       </div>
     </div>
-  );
+  )
 }

@@ -2,19 +2,19 @@ import {
   MetaFunction,
   ActionFunctionArgs,
   json,
-  redirect,
-} from '@remix-run/node';
+  redirect
+} from '@remix-run/node'
 import {
   Link,
   Form,
   useActionData,
   useNavigation,
-  useSearchParams,
-} from '@remix-run/react';
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
-import { createSupabaseServerClient } from '~/utils/supabase.server';
-import { createSupabaseBrowserClient } from '~/utils/supabase.client';
+  useSearchParams
+} from '@remix-run/react'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react'
+import { createSupabaseServerClient } from '~/utils/supabase.server'
+import { createSupabaseBrowserClient } from '~/utils/supabase.client'
 
 type ActionData = {
   errors?: {
@@ -28,147 +28,147 @@ type ActionData = {
 export const meta: MetaFunction = () => {
   return [
     { title: 'Iniciar Sesión - Chasqui II' },
-    { name: 'description', content: 'Inicia sesión en Chasqui II' },
-  ];
-};
+    { name: 'description', content: 'Inicia sesión en Chasqui II' }
+  ]
+}
 
 // Check if the values in the form are valid
 const validator = (data: FormData) => {
-  const email = data.get('email');
-  const password = data.get('password');
-  const errors: { email?: string; password?: string; general?: string } = {};
+  const email = data.get('email')
+  const password = data.get('password')
+  const errors: { email?: string; password?: string; general?: string } = {}
 
   if (typeof email !== 'string' || !email.includes('@')) {
-    errors.email = 'Email Invalido';
+    errors.email = 'Email Invalido'
   }
 
   if (typeof password !== 'string' || password.length < 6) {
-    errors.password = 'La contraseña debe tener al menos 6 caracteres';
+    errors.password = 'La contraseña debe tener al menos 6 caracteres'
   }
 
-  return errors;
-};
+  return errors
+}
 
 // Server side action
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
-  const intent = formData.get('intent') as string;
-  const { supabase, headers } = createSupabaseServerClient(request);
+  const formData = await request.formData()
+  const intent = formData.get('intent') as string
+  const { supabase, headers } = createSupabaseServerClient(request)
 
   // Debug: Check env variables
-  console.log('SUPABASE_URL:', process.env.SUPABASE_URL ? 'SET' : 'NOT SET');
+  console.log('SUPABASE_URL:', process.env.SUPABASE_URL ? 'SET' : 'NOT SET')
   console.log(
     'SUPABASE_ANON_KEY:',
     process.env.SUPABASE_ANON_KEY ? 'SET' : 'NOT SET'
-  );
+  )
 
-  console.log('Login intent:', intent);
+  console.log('Login intent:', intent)
 
   if (intent !== 'login' && intent !== 'google') {
     return json({
       errors: { general: 'Tipo de login no soportado' },
-      success: false,
-    });
+      success: false
+    })
   }
 
   // Handle password login (intent === 'login')
   if (intent === 'login') {
-    const errors = validator(formData);
+    const errors = validator(formData)
     if (Object.keys(errors).length > 0) {
-      return json({ errors, success: false });
+      return json({ errors, success: false })
     }
   }
 
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
 
   try {
-    console.log('Attempting password sign-in for email:', email);
+    console.log('Attempting password sign-in for email:', email)
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
-      password,
-    });
+      password
+    })
 
     if (error) {
-      console.log('Supabase error:', error);
+      console.log('Supabase error:', error)
       return json({
         errors: { general: error.message },
-        success: false,
-      });
+        success: false
+      })
     }
 
     if (data?.user && data?.session) {
-      console.log('User logged in:', data.user.email);
-      console.log('Session created:', data.session);
-      console.log('Headers to return', Array.from(headers.keys()));
+      console.log('User logged in:', data.user.email)
+      console.log('Session created:', data.session)
+      console.log('Headers to return', Array.from(headers.keys()))
       return redirect('/', {
-        headers,
-      }); // Redirect on successful login
+        headers
+      }) // Redirect on successful login
     }
 
     return json({
       errors: { general: 'Login failed' },
-      success: false,
-    });
+      success: false
+    })
   } catch (error) {
-    console.error('Catch block error:', error);
+    console.error('Catch block error:', error)
     return json({
       errors: {
         general: `Error: ${
           error instanceof Error
             ? error.message
             : 'An unexpected error occurred'
-        }`,
+        }`
       },
-      success: false,
-    });
+      success: false
+    })
   }
-};
+}
 
-export default function Login() {
-  const [showPassword, setShowPassword] = useState(false);
-  const actionData = useActionData<ActionData>();
-  const navigation = useNavigation();
-  const [searchParams] = useSearchParams();
-  const isSubmitting = navigation.state === 'submitting';
+export default function Login () {
+  const [showPassword, setShowPassword] = useState(false)
+  const actionData = useActionData<ActionData>()
+  const navigation = useNavigation()
+  const [searchParams] = useSearchParams()
+  const isSubmitting = navigation.state === 'submitting'
 
   // Handle Google OAuth (Client side)
   const handleGoogleAuth = async () => {
     try {
-      const supabase = createSupabaseBrowserClient();
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const supabase = createSupabaseBrowserClient()
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
           queryParams: {
             access_type: 'offline',
-            prompt: 'select_account',
-          },
-        },
-      });
+            prompt: 'select_account'
+          }
+        }
+      })
 
       if (error) {
-        console.error('OAuth error:', error);
+        console.error('OAuth error:', error)
       }
     } catch (error) {
-      console.error('Client OAuth error:', error);
+      console.error('Client OAuth error:', error)
     }
-  };
+  }
 
   // Get URL error parameters
-  const urlError = searchParams.get('error');
+  const urlError = searchParams.get('error')
   const getErrorMessage = (error: string | null) => {
     switch (error) {
       case 'auth_error':
-        return 'Error en la autenticación con Google. Inténtalo de nuevo.';
+        return 'Error en la autenticación con Google. Inténtalo de nuevo.'
       case 'callback_error':
-        return 'Error en el proceso de autenticación. Inténtalo de nuevo.';
+        return 'Error en el proceso de autenticación. Inténtalo de nuevo.'
       case 'no_code':
-        return 'No se recibió el código de autenticación. Inténtalo de nuevo.';
+        return 'No se recibió el código de autenticación. Inténtalo de nuevo.'
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   return (
     <div
@@ -236,18 +236,17 @@ export default function Login() {
                     method="post"
                     className="space-y-6"
                     onSubmit={(e) => {
-                      const submitter = (e.nativeEvent as any).submitter;
-                      const intent = submitter?.value;
+                      const submitter = (e.nativeEvent as any).submitter
+                      const intent = submitter?.value
 
                       // Solo validar campos si es login por contraseña
                       if (intent === 'login') {
-                        const formData = new FormData(e.currentTarget);
-                        const email = formData.get('email') as string;
-                        const password = formData.get('password') as string;
+                        const formData = new FormData(e.currentTarget)
+                        const email = formData.get('email') as string
+                        const password = formData.get('password') as string
 
                         if (!email || !password) {
-                          e.preventDefault();
-                          return;
+                          e.preventDefault()
                         }
                       }
                     }}
@@ -307,11 +306,13 @@ export default function Login() {
                             className="absolute right-4 top-1/2 transform -translate-y-1/2"
                             onClick={() => setShowPassword(!showPassword)}
                           >
-                            {showPassword ? (
+                            {showPassword
+                              ? (
                               <EyeSlashIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                            ) : (
+                                )
+                              : (
                               <EyeIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                            )}
+                                )}
                           </button>
                           {actionData?.errors?.password && (
                             <p className="mt-1 text-sm text-red-600">
@@ -416,5 +417,5 @@ export default function Login() {
         </Link>
       </div>
     </div>
-  );
+  )
 }

@@ -4,7 +4,7 @@ import { Link } from 'react-scroll'
 import { Link as RemixLink } from '@remix-run/react'
 
 interface HeaderProps {
-  user: any | null; 
+  user: any | null;
 }
 
 const Header = ({ user }: HeaderProps) => {
@@ -37,7 +37,6 @@ const Header = ({ user }: HeaderProps) => {
     ['news', 'Noticias'],
     ['contact', 'Contacto']
   ]
-
 
   // Debug temporal
   console.log('Header render - User:', user)
@@ -77,7 +76,7 @@ const Header = ({ user }: HeaderProps) => {
             ))}
           </ul>
         </nav>
-        
+
         {/* Auth Links */}
         <div className={`
           ${mobileNavActive ? 'block' : 'hidden'} 
@@ -85,7 +84,8 @@ const Header = ({ user }: HeaderProps) => {
           transition-opacity duration-300 ease-in-out
           ${headerScrolled ? 'opacity-0 invisible' : 'opacity-100 visible'}
         `}>
-          {user ? (
+          {user
+            ? (
             <form action="/logout" method="post">
               <button
                 type="submit"
@@ -94,8 +94,8 @@ const Header = ({ user }: HeaderProps) => {
                 Cerrar Sesión
               </button>
             </form>
-          ): 
-          <>
+              )
+            : <>
           <RemixLink
             to="/login"
             className="text-gray-300 hover:text-white text-sm font-semibold transition duration-300 ease-in-out"
