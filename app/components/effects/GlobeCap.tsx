@@ -84,13 +84,11 @@ export function GlobeCap({
     return () => observer.disconnect();
   }, []);
 
-  // Load world data
+  // Load world data from local asset
   useEffect(() => {
     const loadWorld = async () => {
       try {
-        const response = await fetch(
-          "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
-        );
+        const response = await fetch("/assets/data/countries-110m.json");
         const world = (await response.json()) as Topology<{
           countries: GeometryCollection;
           land: GeometryCollection;

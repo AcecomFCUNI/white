@@ -74,14 +74,49 @@ export const COLORS = {
   },
 } as const
 
-// Animation Defaults
+/**
+ * Animation Configuration
+ *
+ * Centralized animation settings used across the project.
+ * Ensures consistent timing and behavior.
+ */
 export const ANIMATION = {
+  // Duration presets (in seconds for Framer Motion)
+  duration: {
+    fast: 0.15,
+    normal: 0.3,
+    slow: 0.6,
+    slower: 1.0,
+  },
+  // Stagger settings for sequential animations
+  stagger: {
+    fast: 0.05,
+    normal: 0.1,
+    slow: 0.15,
+  },
+  // FPS settings for canvas animations
+  fps: {
+    target: 30,
+    interval: 1000 / 30, // ~33.33ms
+  },
+  // Spring physics for Framer Motion
+  spring: {
+    stiffness: 500,
+    damping: 30,
+    mass: 1,
+  },
+  // Ease presets (CSS timing functions)
+  ease: {
+    default: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    in: 'cubic-bezier(0.4, 0, 1, 1)',
+    out: 'cubic-bezier(0, 0, 0.2, 1)',
+    inOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+  },
+  // FadeInView defaults
   fadeIn: {
     duration: 0.6,
     delay: 0.1,
-  },
-  stagger: {
-    delay: 0.1,
+    distance: 20,
   },
 } as const
 

@@ -105,7 +105,47 @@
     "titleHighlight": "Write to us",
     "address": "Address",
     "email": "Email",
-    "phone": "Phone"
+    "phone": "Phone",
+    "fields": {
+      "name": "Name",
+      "email": "Email address",
+      "subject": "Subject",
+      "message": "Message"
+    },
+    "placeholders": {
+      "name": "Your full name",
+      "email": "you@email.com",
+      "subject": "Select a subject",
+      "message": "Write your message here..."
+    },
+    "subjects": {
+      "general": "General inquiry",
+      "collaboration": "Collaboration",
+      "sponsorship": "Sponsorship",
+      "press": "Press",
+      "other": "Other"
+    },
+    "errors": {
+      "nameRequired": "Name is required",
+      "nameTooShort": "Name must be at least 2 characters",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Enter a valid email address",
+      "subjectRequired": "Please select a subject",
+      "messageRequired": "Message is required",
+      "messageTooShort": "Message must be at least 10 characters"
+    },
+    "submit": "Send message",
+    "sending": "Sending...",
+    "success": {
+      "title": "Message sent!",
+      "message": "Thank you for contacting us. We'll respond soon.",
+      "sendAnother": "Send another message"
+    },
+    "error": {
+      "title": "Error sending",
+      "message": "There was a problem sending your message. Please try again.",
+      "tryAgain": "Try again"
+    }
   },
   "footer": {
     "tagline": "A student mission to space",

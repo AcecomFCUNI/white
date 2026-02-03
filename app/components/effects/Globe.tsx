@@ -73,15 +73,17 @@ export function Globe({
     return () => observer.disconnect();
   }, []);
 
-  // Load world data
+  // Load world data from local asset (bundled for faster loading)
   useEffect(() => {
     const loadWorld = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await fetch(
-          "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
-        );
+        // Use local asset instead of CDN for:
+        // - Faster loading (no external network dependency)
+        // - Offline support
+        // - Consistent availability
+        const response = await fetch("/assets/data/countries-110m.json");
         if (!response.ok) {
           throw new Error(`HTTP error: ${response.status}`);
         }
