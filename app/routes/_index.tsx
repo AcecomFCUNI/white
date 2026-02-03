@@ -1,42 +1,41 @@
-import type { MetaFunction } from '@remix-run/node'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
-import { useEffect } from 'react'
-import { Contact, Counts, Features, Footer, Header, Hero, Invest, JoinUs, News, Partners, SupportUs, Testimonials } from '~/sections'
+/**
+ * Root index - redirects to language-prefixed route
+ */
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: 'Chasqui II' },
-    { name: 'Chasqui II', content: 'Chasqui II' }
-  ]
+import { LoaderFunctionArgs, redirect } from '@remix-run/node'
+import { defaultLanguage, supportedLanguages, type Language } from '~/lib/i18n-routes'
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  // Check for language cookie
+  const cookieHeader = request.headers.get('Cookie') || ''
+  const cookies = Object.fromEntries(
+    cookieHeader.split('; ').filter(Boolean).map(c => {
+      const [key, ...val] = c.split('=')
+      return [key, val.join('=')]
+    })
+  )
+
+  let detectedLang: Language = defaultLanguage
+
+  // 1. Check cookie
+  const cookieLang = cookies['i18next'] as Language
+  if (cookieLang && supportedLanguages.includes(cookieLang)) {
+    detectedLang = cookieLang
+  } else {
+    // 2. Check Accept-Language header
+    const acceptLang = request.headers.get('Accept-Language')
+    if (acceptLang) {
+      const browserLang = acceptLang.split(',')[0].split('-')[0] as Language
+      if (supportedLanguages.includes(browserLang)) {
+        detectedLang = browserLang
+      }
+    }
+  }
+
+  return redirect(`/${detectedLang}`)
 }
 
-export default function Index () {
-  useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      easing: 'ease-in-out',
-      once: true,
-      mirror: false
-    })
-  }, [])
-  return (
-   <>
-    <Header />
-    <Hero />
-    <main id="main">
-      <Features />
-      <Counts />
-      <Testimonials />
-      <Partners />
-      <JoinUs />
-      <SupportUs />
-      <Invest />
-      <News />
-      <Contact />
-    </main>
-    <Footer />
-
-   </>
-  )
+// This component won't render due to redirect, but required for route
+export default function Index() {
+  return null
 }

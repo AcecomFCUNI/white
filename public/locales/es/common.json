@@ -1,0 +1,318 @@
+{
+  "common": {
+    "comingSoon": "Próximamente",
+    "skipToContent": "Saltar al contenido principal"
+  },
+  "nav": {
+    "home": "Inicio",
+    "about": "Nosotros",
+    "project": "Proyecto",
+    "news": "Noticias",
+    "shop": "Tienda",
+    "support": "Apoyanos",
+    "language": "Idioma"
+  },
+  "hero": {
+    "subtitle": "Una mision estudiantil hacia el espacio",
+    "tagline": "El primer CubeSat peruano disenado y construido por estudiantes de la Universidad Nacional de Ingenieria",
+    "scrollCta": "Descubre nuestra historia"
+  },
+  "story": {
+    "badge": "Nuestra Historia",
+    "title1": "Desde las aulas de la",
+    "title2": "miramos hacia las estrellas",
+    "p1": "Todo comenzo con un sueno compartido: demostrar que los estudiantes peruanos pueden conquistar el espacio. No como espectadores, sino como protagonistas de nuestra propia historia aeroespacial.",
+    "p2": "En 2018, un grupo de estudiantes de la Universidad Nacional de Ingenieria decidio que era momento de actuar. Nacio asi el proyecto Chasqui II, nombrado en honor a los mensajeros del imperio incaico que recorrian miles de kilometros llevando informacion vital.",
+    "p3": "Hoy, nuestro CubeSat llevara ese espiritu innovador mas alla de nuestra atmosfera, demostrando que los limites solo existen para ser superados.",
+    "stats": {
+      "year": "Ano de inicio",
+      "students": "Estudiantes involucrados",
+      "subsystems": "Subsistemas",
+      "size": "Tamano del CubeSat"
+    }
+  },
+  "team": {
+    "badge": "Nuestro Equipo",
+    "title": "Juntos construimos el",
+    "titleHighlight": "futuro",
+    "design": {
+      "title": "Diseno y Publicidad",
+      "description": "Creamos la identidad visual del proyecto y comunicamos nuestra mision al mundo.",
+      "skills": ["Diseño Gráfico", "Redes Sociales", "Branding", "Fotografía"]
+    },
+    "management": {
+      "title": "Gestion y Logistica",
+      "description": "Coordinamos recursos, tiempos y equipos para que cada pieza encaje perfectamente.",
+      "skills": ["Project Management", "Finanzas", "Alianzas", "Eventos"]
+    },
+    "stem": {
+      "title": "STEM",
+      "description": "El corazon tecnico. Ingenieros y cientificos que disenan y construyen el CubeSat.",
+      "skills": ["Electrónica", "Software", "Mecánica", "Telecom"]
+    }
+  },
+  "mission": {
+    "badge": "Tecnologia",
+    "title": "10 Subsistemas,",
+    "titleHighlight": "una mision",
+    "description": "Cada subsistema es vital para el exito de nuestra mision. Desde la generacion de energia hasta las comunicaciones con la Tierra, todo trabaja en perfecta armonia.",
+    "subsystems": {
+      "payload": { "name": "Carga Util", "description": "Camara y sensores para captura de imagenes de la Tierra" },
+      "computer": { "name": "Computadora a Bordo", "description": "Cerebro del satelite, procesa datos y comandos" },
+      "comms": { "name": "Comunicaciones", "description": "Enlace con la estacion terrena" },
+      "thermal": { "name": "Control Termico", "description": "Mantiene temperaturas optimas de operacion" },
+      "attitude": { "name": "Actitud y Control", "description": "Orientacion y estabilizacion del satelite" },
+      "ground": { "name": "Estacion Terrena", "description": "Centro de control y monitoreo en Tierra" },
+      "structure": { "name": "Estructura Mecanica", "description": "Chasis que protege todos los componentes" },
+      "manufacturing": { "name": "Manufactura", "description": "Fabricacion y ensamblaje de componentes" },
+      "power": { "name": "Potencia", "description": "Paneles solares y distribucion de energia" },
+      "propulsion": { "name": "Propulsion", "description": "Sistema de maniobras orbitales" }
+    }
+  },
+  "alliances": {
+    "badge": "Alianzas Estrategicas",
+    "title": "No estamos solos en esta",
+    "titleHighlight": "mision",
+    "description": "Contamos con el apoyo de instituciones y organizaciones que creen en el potencial de la juventud peruana para conquistar el espacio.",
+    "partners": {
+      "ctic": { "name": "CTIC UNI", "description": "Laboratorio de investigación" },
+      "ieee": { "name": "IEEE AESS UNI", "description": "Capítulo de Sistemas Aeroespaciales" },
+      "acecom": { "name": "ACECOM", "description": "Asociación de Computación" },
+      "graviit": { "name": "GRAVIIT SPACE", "description": "Aliado estratégico aeroespacial" }
+    },
+    "cta": "Tu organizacion quiere ser parte de esta mision?",
+    "button": "Contactanos"
+  },
+  "cta": {
+    "badge": "Se parte del cambio",
+    "title": "Unete a nuestra comunidad",
+    "description": "Forma parte del grupo de personas apasionadas por el espacio. Comparte ideas, recibe actualizaciones y participa en nuestros eventos.",
+    "whatsappButton": "Unirse al grupo de WhatsApp",
+    "whatsappComingSoon": "Link disponible pronto",
+    "merchTitle": "Apoyanos con nuestro",
+    "merchHighlight": "merchandise",
+    "exploreShop": "Explorar Tienda",
+    "donationTitle": "Apoya con una",
+    "donationHighlight": "donacion",
+    "donationDescription": "Tu contribucion nos ayuda a adquirir componentes, financiar pruebas y acercarnos cada dia mas al espacio.",
+    "scanQr": "Escanea el QR para donar",
+    "bankTransfer": "Tambien aceptamos transferencias bancarias.",
+    "contactUs": "Contactanos",
+    "moreInfo": "para mas informacion."
+  },
+  "contact": {
+    "badge": "Contacto",
+    "title": "Tienes preguntas?",
+    "titleHighlight": "Escribenos",
+    "address": "Direccion",
+    "email": "Email",
+    "phone": "Telefono"
+  },
+  "footer": {
+    "tagline": "Una mision estudiantil hacia el espacio",
+    "copyright": "© {{year}} Proyecto Chasqui II - Universidad Nacional de Ingenieria. Todos los derechos reservados."
+  },
+  "about": {
+    "badge": "Conocenos",
+    "title": "Conoce a",
+    "subtitle": "El equipo de estudiantes que esta haciendo historia en la ingenieria aeroespacial peruana.",
+    "history": {
+      "title": "Nuestra Historia",
+      "p1": "El proyecto Chasqui II nacio en 2018 en la Universidad Nacional de Ingenieria, con el objetivo de disenar, construir y operar el primer CubeSat peruano desarrollado integramente por estudiantes.",
+      "p2": "Nuestro nombre honra a los legendarios mensajeros del imperio Inca, los Chasquis, quienes recorrian grandes distancias llevando informacion vital. Hoy, llevamos ese legado al espacio.",
+      "p3": "Somos un equipo multidisciplinario de mas de 60 estudiantes de diferentes facultades, unidos por la pasion de llevar a Peru al espacio."
+    },
+    "mission": {
+      "title": "Nuestra Mision",
+      "p1": "Desarrollar capacidades aeroespaciales en el Peru a traves de la formacion practica de estudiantes en el diseno y construccion de sistemas satelitales.",
+      "p2": "Inspirar a las nuevas generaciones de peruanos a perseguir carreras en ciencia, tecnologia, ingenieria y matematicas."
+    },
+    "vision": {
+      "title": "Nuestra Vision",
+      "text": "Convertirnos en un referente de desarrollo aeroespacial estudiantil en Latinoamerica, demostrando que con dedicacion y trabajo en equipo, los limites solo existen para ser superados."
+    },
+    "team": {
+      "title": "Directiva",
+      "subtitle": "Los lideres que guian nuestra mision hacia el espacio",
+      "director": "Director General",
+      "coordinator": "Coordinador General"
+    }
+  },
+  "project": {
+    "badge": "Tecnologia",
+    "title": "El",
+    "subtitle": "Conoce la tecnologia detras de nuestra mision espacial: un nanosatelite con 10 subsistemas integrados trabajando en perfecta armonia.",
+    "specsTitle": "Especificaciones Generales",
+    "specs": {
+      "type": "Tipo",
+      "typeValue": "CubeSat 1U",
+      "dimensions": "Dimensiones",
+      "dimensionsValue": "10 x 10 x 10 cm",
+      "mass": "Masa",
+      "massValue": "< 1.33 kg",
+      "orbit": "Orbita",
+      "orbitValue": "LEO (~400 km)",
+      "lifespan": "Vida util",
+      "lifespanValue": "1-2 anos",
+      "power": "Potencia",
+      "powerValue": "2W promedio"
+    },
+    "subsystemsTitle": "Subsistemas",
+    "subsystemsSubtitle": "Cada componente es esencial para el exito de la mision",
+    "subsystems": {
+      "payload": {
+        "name": "Carga Util",
+        "description": "Sistema de captura de imagenes de la superficie terrestre mediante camara de alta resolucion y sensores especializados.",
+        "detail1": "Camara de resolucion 5MP",
+        "detail2": "Sensores multiespectrales",
+        "detail3": "Almacenamiento de 16GB"
+      },
+      "computer": {
+        "name": "Computadora a Bordo (OBC)",
+        "description": "El cerebro del satelite, responsable de procesar datos, ejecutar comandos y coordinar todos los subsistemas.",
+        "detail1": "Procesador ARM Cortex-M4",
+        "detail2": "Sistema operativo en tiempo real",
+        "detail3": "Redundancia de hardware"
+      },
+      "comms": {
+        "name": "Comunicaciones (COMMS)",
+        "description": "Sistema de enlace bidireccional entre el satelite y la estacion terrena para transmision de datos y telecomandos.",
+        "detail1": "Banda UHF/VHF",
+        "detail2": "Protocolo AX.25",
+        "detail3": "Antena desplegable"
+      },
+      "thermal": {
+        "name": "Control Termico (TCS)",
+        "description": "Mantiene todos los componentes dentro de su rango de temperatura operativa mediante tecnicas pasivas y activas.",
+        "detail1": "Radiadores pasivos",
+        "detail2": "MLI (aislamiento multicapa)",
+        "detail3": "Sensores de temperatura"
+      },
+      "attitude": {
+        "name": "Determinacion y Control de Actitud (ADCS)",
+        "description": "Sistema que determina y controla la orientacion del satelite en el espacio para apuntar correctamente los instrumentos.",
+        "detail1": "Magnetometros",
+        "detail2": "Giroscopios",
+        "detail3": "Ruedas de reaccion"
+      },
+      "ground": {
+        "name": "Estacion Terrena (GS)",
+        "description": "Centro de control y monitoreo en tierra que recibe telemetria y envia comandos al satelite.",
+        "detail1": "Antena Yagi de alta ganancia",
+        "detail2": "Software de seguimiento",
+        "detail3": "Centro de operaciones"
+      },
+      "structure": {
+        "name": "Estructura Mecanica",
+        "description": "Chasis que protege todos los componentes internos y cumple con los estandares CubeSat para el despliegue.",
+        "detail1": "Aluminio 6061-T6",
+        "detail2": "Estandar CubeSat 1U",
+        "detail3": "Rails de despliegue"
+      },
+      "manufacturing": {
+        "name": "Manufactura Espacial",
+        "description": "Procesos de fabricacion y ensamblaje siguiendo estandares de calidad aeroespacial.",
+        "detail1": "Sala limpia clase 100,000",
+        "detail2": "Pruebas de vibracion",
+        "detail3": "Inspeccion de calidad"
+      },
+      "power": {
+        "name": "Potencia (EPS)",
+        "description": "Sistema de generacion, almacenamiento y distribucion de energia electrica para todos los subsistemas.",
+        "detail1": "Paneles solares de triple union",
+        "detail2": "Baterias Li-ion",
+        "detail3": "Reguladores de voltaje"
+      },
+      "propulsion": {
+        "name": "Propulsion",
+        "description": "Sistema de maniobras orbitales para ajustes de altitud y deorbiting al final de la mision.",
+        "detail1": "Propulsion electrica",
+        "detail2": "Control de actitud",
+        "detail3": "Deorbiting pasivo"
+      }
+    }
+  },
+  "news": {
+    "badge": "Actualidades",
+    "titleHighlight": "Noticias",
+    "title": "y Eventos",
+    "subtitle": "Mantente al dia con los ultimos avances, eventos y logros del proyecto Chasqui II.",
+    "readMore": "Leer mas",
+    "moreNews": "Mas Noticias",
+    "categories": {
+      "event": "Evento",
+      "technical": "Tecnico",
+      "team": "Equipo",
+      "international": "Internacional",
+      "research": "Investigacion",
+      "infrastructure": "Infraestructura"
+    },
+    "featured": {
+      "title": "Chasqui II presente en el Festival Latinoamericano de Instalacion Tecnologica",
+      "excerpt": "Nuestro equipo participo activamente en FLIT 2024, presentando los avances del proyecto a la comunidad cientifica y tecnologica de la region."
+    },
+    "items": {
+      "comms": {
+        "title": "Avances en el subsistema de comunicaciones",
+        "excerpt": "El equipo de COMMS completo exitosamente las pruebas de enlace con la antena de la estacion terrena."
+      },
+      "unitec": {
+        "title": "Chasqui II en UNITEC 2024",
+        "excerpt": "Presentamos nuestro proyecto en el congreso UNITEC, recibiendo retroalimentacion valiosa de expertos internacionales."
+      },
+      "newMembers": {
+        "title": "Nuevos miembros se unen al equipo",
+        "excerpt": "Damos la bienvenida a 15 nuevos estudiantes que se integran a las diferentes areas del proyecto."
+      },
+      "apsco": {
+        "title": "Participacion en APSCO",
+        "excerpt": "Representantes de Chasqui II asistieron al programa de entrenamiento de la Asia-Pacific Space Cooperation Organization."
+      },
+      "iac": {
+        "title": "Congreso Internacional de Astronautica (IAC)",
+        "excerpt": "Nuestro paper fue aceptado y presentado en el congreso mas importante de la industria espacial mundial."
+      },
+      "workshop": {
+        "title": "Nuevo taller de soldadura espacial",
+        "excerpt": "Inauguramos el taller de soldadura especializada para componentes electronicos del CubeSat."
+      }
+    }
+  },
+  "shop": {
+    "badge": "Merchandise",
+    "titleHighlight": "Tienda",
+    "title": "Oficial",
+    "subtitle": "Cada compra nos ayuda a financiar el proyecto. Lleva contigo un pedazo de nuestra mision espacial.",
+    "buyButton": "Comprar",
+    "howToBuy": {
+      "title": "Como comprar?",
+      "description": "Haz clic en \"Comprar\" para contactarnos por WhatsApp. Coordinaremos la entrega y el pago contigo directamente. Aceptamos efectivo, Yape y Plin."
+    },
+    "products": {
+      "mug": {
+        "name": "Taza Chasqui II",
+        "description": "Taza de ceramica con el logo oficial del proyecto"
+      },
+      "keychain": {
+        "name": "Llavero Chasqui II",
+        "description": "Llavero acrilico con diseno espacial"
+      },
+      "shirt": {
+        "name": "Polo Oficial",
+        "description": "Polo de algodon con logo bordado"
+      },
+      "stickers": {
+        "name": "Pack de Stickers",
+        "description": "Set de 5 stickers con disenos del proyecto"
+      },
+      "cap": {
+        "name": "Gorra Chasqui",
+        "description": "Gorra con logo bordado ajustable"
+      },
+      "notebook": {
+        "name": "Libreta de Notas",
+        "description": "Libreta A5 con tapa dura y diseno espacial"
+      }
+    }
+  }
+}

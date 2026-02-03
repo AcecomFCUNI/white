@@ -1,0 +1,5 @@
+export { AboutPage } from './AboutPage'
+export { ProjectPage } from './ProjectPage'
+export { NewsPage } from './NewsPage'
+export { ShopPage } from './ShopPage'
+export { ErrorPage } from './ErrorPage'

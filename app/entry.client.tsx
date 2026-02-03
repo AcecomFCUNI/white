@@ -7,12 +7,36 @@
 import { RemixBrowser } from '@remix-run/react'
 import { startTransition, StrictMode } from 'react'
 import { hydrateRoot } from 'react-dom/client'
+import i18next from 'i18next'
+import { I18nextProvider, initReactI18next } from 'react-i18next'
+import i18nConfig from './i18n'
+import { resources } from './lib/translations'
 
-startTransition(() => {
-  hydrateRoot(
-    document,
-    <StrictMode>
-      <RemixBrowser />
-    </StrictMode>
-  )
-})
+async function hydrate() {
+  await i18next
+    .use(initReactI18next)
+    .init({
+      ...i18nConfig,
+      ns: ['common'],
+      // Use bundled translations for instant language switching
+      resources,
+      // Detect language from HTML tag (set by server)
+      lng: document.documentElement.lang || 'es',
+      interpolation: {
+        escapeValue: false
+      }
+    })
+
+  startTransition(() => {
+    hydrateRoot(
+      document,
+      <StrictMode>
+        <I18nextProvider i18n={i18next}>
+          <RemixBrowser />
+        </I18nextProvider>
+      </StrictMode>
+    )
+  })
+}
+
+hydrate()
