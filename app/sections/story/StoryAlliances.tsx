@@ -37,6 +37,9 @@ export function StoryAlliances () {
       {/* Background */}
       <SectionBackground preset="alliances" gradientTop={false} />
 
+      {/* Top gradient for smoother transition from Mission section */}
+      <div className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-40 bg-gradient-to-b from-black to-transparent" />
+
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-6xl px-4">
         {/* Header */}

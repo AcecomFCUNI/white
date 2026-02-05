@@ -63,7 +63,7 @@ export function StoryMission () {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[200vh] w-full overflow-hidden bg-black py-32"
+      className="relative w-full overflow-hidden bg-black pb-32 pt-32"
     >
       {/* Background - Layered nebulas for parallax depth */}
       <div className="absolute inset-0">
@@ -72,29 +72,29 @@ export function StoryMission () {
         <NebulaOrb
           color="rgba(219, 1, 58, 0.12)"
           size={1000}
-          position={{ x: '60%', y: '30%' }}
+          position={{ x: '60%', y: '25%' }}
           blur={180}
         />
         {/* Capa 2 - Media izquierda */}
         <NebulaOrb
           color="rgba(59, 130, 246, 0.1)"
           size={600}
-          position={{ x: '15%', y: '50%' }}
+          position={{ x: '15%', y: '45%' }}
           blur={120}
         />
-        {/* Capa 3 - Media derecha */}
+        {/* Capa 3 - Media derecha - purple for transition to Alliances */}
         <NebulaOrb
-          color="rgba(139, 92, 246, 0.1)"
-          size={500}
-          position={{ x: '85%', y: '70%' }}
-          blur={100}
+          color="rgba(139, 92, 246, 0.12)"
+          size={600}
+          position={{ x: '75%', y: '75%' }}
+          blur={140}
         />
-        {/* Capa 4 - Cercana central */}
+        {/* Capa 4 - Bottom center - softer red for transition */}
         <NebulaOrb
-          color="rgba(219, 1, 58, 0.08)"
-          size={400}
-          position={{ x: '40%', y: '80%' }}
-          blur={80}
+          color="rgba(219, 1, 58, 0.06)"
+          size={500}
+          position={{ x: '35%', y: '90%' }}
+          blur={120}
         />
       </div>
 
@@ -164,7 +164,7 @@ export function StoryMission () {
 
       {/* Gradient overlays */}
       <div className="pointer-events-none absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent" />
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent" />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent" />
     </section>
   )
 }

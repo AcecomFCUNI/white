@@ -47,7 +47,7 @@ const teamAreaStyles: Record<TeamAreaId, { iconBg: string; iconColor: string; sh
 export function StoryTeam () {
   const { t } = useTranslation()
   return (
-    <section className="relative bg-black py-20 md:py-32">
+    <section className="relative bg-black py-32">
       {/* Background - Layered nebulas for parallax depth */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <StarField starCount={60} parallaxEnabled />

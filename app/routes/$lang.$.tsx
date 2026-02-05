@@ -6,19 +6,20 @@
 import { LoaderFunctionArgs, redirect, json } from '@remix-run/node'
 import type { MetaFunction } from '@remix-run/node'
 import { useLoaderData, useRouteError, isRouteErrorResponse } from '@remix-run/react'
-import { useTranslation } from 'react-i18next'
 import {
   supportedLanguages,
   routeMap,
   type Language,
   type RouteKey
 } from '~/lib/i18n-routes'
+import { client } from '~/sanity/lib'
+import { PRODUCTS_LIST_QUERY } from '~/sanity/lib/queries'
 
 // Import page components
 import { AboutPage } from '~/pages/AboutPage'
 import { ProjectPage } from '~/pages/ProjectPage'
 import { NewsPage } from '~/pages/NewsPage'
-import { ShopPage } from '~/pages/ShopPage'
+import { ShopPage, type SanityProduct } from '~/pages/ShopPage'
 import { ErrorPage } from '~/pages/ErrorPage'
 
 // Map route keys to page components
@@ -52,7 +53,13 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw redirect(`/${lang}`)
   }
 
-  return json({ lang, routeKey: matchedRouteKey, slug })
+  // Fetch products from Sanity for the shop page
+  let products: SanityProduct[] = []
+  if (matchedRouteKey === 'shop') {
+    products = await client.fetch<SanityProduct[]>(PRODUCTS_LIST_QUERY)
+  }
+
+  return json({ lang, routeKey: matchedRouteKey, slug, products })
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -117,12 +124,11 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 }
 
 export default function DynamicPage() {
-  const { lang, routeKey } = useLoaderData<typeof loader>()
-  const { i18n } = useTranslation()
+  const { lang, routeKey, products } = useLoaderData<typeof loader>()
 
-  // Sync i18n with URL language
-  if (i18n.language !== lang) {
-    i18n.changeLanguage(lang)
+  // Special handling for shop page to pass products
+  if (routeKey === 'shop') {
+    return <ShopPage products={products} lang={lang} />
   }
 
   const PageComponent = pageComponents[routeKey as Exclude<RouteKey, 'home'>]

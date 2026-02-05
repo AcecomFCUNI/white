@@ -23,7 +23,7 @@ const variants = {
   primary: 'bg-brand text-white hover:bg-brand-dark hover:shadow-lg hover:shadow-brand/30',
   outline: 'border border-brand text-white hover:bg-brand',
   ghost: 'text-gray-300 hover:text-white hover:bg-white/10',
-  whatsapp: 'bg-whatsapp text-white shadow-lg shadow-whatsapp/30 hover:bg-brand hover:shadow-xl hover:shadow-brand/40',
+  whatsapp: 'bg-whatsapp text-white shadow-lg shadow-whatsapp/30 hover:bg-brand hover:text-white hover:shadow-xl hover:shadow-brand/40',
 }
 
 const sizes = {

@@ -49,7 +49,7 @@ export function StoryContact () {
       <div className="pointer-events-none absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent z-10" />
 
       {/* Contact section */}
-      <div className="relative z-10 py-20">
+      <div className="relative z-10 py-32">
         <div className="mx-auto max-w-6xl px-4">
           <div className="grid gap-12 md:grid-cols-2">
             {/* Contact info */}

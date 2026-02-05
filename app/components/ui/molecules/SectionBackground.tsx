@@ -58,9 +58,12 @@ const presets: Record<string, PresetConfig> = {
   alliances: {
     starCount: 100,
     nebulas: [
-      { color: 'rgba(139, 92, 246, 0.1)', size: 800, position: { x: '70%', y: '30%' }, blur: 150 },
-      { color: 'rgba(219, 1, 58, 0.08)', size: 500, position: { x: '20%', y: '60%' }, blur: 100 },
-      { color: 'rgba(59, 130, 246, 0.1)', size: 350, position: { x: '80%', y: '75%' }, blur: 70 },
+      // Top nebula - red to match Mission section's ending colors
+      { color: 'rgba(219, 1, 58, 0.08)', size: 600, position: { x: '40%', y: '10%' }, blur: 140 },
+      // Middle - transition to purple
+      { color: 'rgba(139, 92, 246, 0.1)', size: 700, position: { x: '70%', y: '45%' }, blur: 130 },
+      // Bottom accents
+      { color: 'rgba(59, 130, 246, 0.08)', size: 400, position: { x: '20%', y: '70%' }, blur: 100 },
     ]
   },
   cta: {
@@ -124,12 +127,12 @@ export function SectionBackground({
         ))}
       </div>
 
-      {/* Gradient overlays */}
+      {/* Gradient overlays - larger for smoother section transitions */}
       {gradientTop && (
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-32 bg-gradient-to-b from-black to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-48 bg-gradient-to-b from-black via-black/30 to-transparent" />
       )}
       {gradientBottom && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-gradient-to-t from-black to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-48 bg-gradient-to-t from-black via-black/30 to-transparent" />
       )}
     </>
   )
