@@ -17,6 +17,10 @@ Landing page del proyecto Chasqui II, el primer CubeSat peruano diseñado y cons
 | `pnpm run start` | Ejecutar servidor de produccion |
 | `pnpm run lint` | Ejecutar ESLint |
 | `pnpm run typecheck` | Verificar tipos TypeScript |
+| `pnpm sanity` | CLI de Sanity Studio |
+| `pnpm sanity:dev` | Iniciar Sanity Studio local |
+| `pnpm sanity:deploy` | Desplegar Sanity Studio |
+| `pnpm sanity:schema:deploy` | Desplegar cambios de schema al cloud |
 
 ## Tech Stack
 
@@ -43,8 +47,10 @@ White/
 │   ├── sanity/lib/          # Cliente Sanity, queries GROQ
 │   └── sections/            # Secciones de la landing (story/)
 ├── public/                  # Archivos estaticos
-├── schemaTypes/             # Schemas de Sanity Studio
+├── schemaTypes/             # Schemas de Sanity Studio (source of truth)
 ├── sanity.config.ts         # Configuracion de Sanity Studio
+├── sanity.cli.ts            # Configuracion del CLI de Sanity
+├── .env.example             # Template de variables de entorno
 └── docs/                    # Documentacion del proyecto
     ├── auditorias/
     ├── todos/
@@ -77,9 +83,21 @@ El contenido se gestiona desde [Sanity Studio](https://www.sanity.io/manage).
 - Project ID: `oh7nanvc`
 - Dataset: `production`
 
-Para desplegar cambios de schema:
+**Setup:**
+
+1. Copiar `.env.example` a `.env` y completar las variables:
 ```bash
-npx sanity@latest schema deploy
+cp .env.example .env
+```
+
+2. Los schemas locales en `schemaTypes/` son el source of truth. Para desplegar cambios al cloud:
+```bash
+pnpm sanity:schema:deploy
+```
+
+3. Para levantar Sanity Studio en local:
+```bash
+pnpm sanity:dev
 ```
 
 ## Design System
