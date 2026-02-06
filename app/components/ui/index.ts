@@ -21,7 +21,7 @@ export { Badge, Button, LinkButton, Heading, IconButton, IconLink, Input, Textar
 // Molecules - Combinations of atoms
 export { Card, LanguageSelector, ToastProvider, useToast, SectionHeader, SectionBackground } from './molecules'
 
-// Organisms - Complex UI components
+// Organisms - Complex UI components (Header, Footer)
 export { Header, Footer } from './organisms'
 
 // Templates - Page-level layouts (future)

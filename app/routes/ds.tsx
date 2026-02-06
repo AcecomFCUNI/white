@@ -7,7 +7,7 @@
  * Estructura:
  * - Atoms: Badge, Button, Heading, IconButton, Input, Textarea, Select, Spinner, Skeleton
  * - Molecules: Card, Modal, Tooltip, Toast, Breadcrumb, Pagination, EmptyState, SectionHeader, ProductCard, NewsCard
- * - Organisms: Header, Footer, ContactForm
+ * - Organisms: Header, Footer
  */
 
 import type { MetaFunction } from '@remix-run/node'
@@ -44,7 +44,7 @@ import {
 } from '~/components/ui/molecules'
 
 // Organisms
-import { Footer, ContactForm } from '~/components/ui/organisms'
+import { Footer } from '~/components/ui/organisms'
 
 import { StarField } from '~/components/effects/StarField'
 import {
@@ -96,7 +96,7 @@ export default function DesignSystemPage() {
           <div className="mb-16 grid gap-4 sm:grid-cols-4">
             <StatCard number="9" label="Atoms" color="brand" />
             <StatCard number="10" label="Molecules" color="blue" />
-            <StatCard number="3" label="Organisms" color="green" />
+            <StatCard number="2" label="Organisms" color="green" />
             <StatCard number="2" label="Hooks" color="purple" />
           </div>
 
@@ -161,7 +161,6 @@ export default function DesignSystemPage() {
             <div className="space-y-16">
               <HeaderSection />
               <FooterSection />
-              <ContactFormSection />
             </div>
           </div>
 
@@ -290,6 +289,44 @@ function ComponentRow({ label, children }: { label: string; children: React.Reac
         <span className="font-mono text-xs text-gray-500">{label}</span>
       </div>
       <div className="flex flex-wrap items-center gap-3">{children}</div>
+    </div>
+  )
+}
+
+function PropsTable({
+  props,
+}: {
+  props: Array<{
+    name: string
+    type: string
+    default?: string
+    description: string
+  }>
+}) {
+  return (
+    <div className="overflow-x-auto rounded-lg border border-gray-800">
+      <table className="w-full text-left text-sm">
+        <thead className="border-b border-gray-800 bg-gray-900/80">
+          <tr>
+            <th className="px-4 py-2 font-mono text-xs font-medium text-gray-400">Prop</th>
+            <th className="px-4 py-2 font-mono text-xs font-medium text-gray-400">Type</th>
+            <th className="px-4 py-2 font-mono text-xs font-medium text-gray-400">Default</th>
+            <th className="px-4 py-2 text-xs font-medium text-gray-400">Descripcion</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-800/50">
+          {props.map((prop) => (
+            <tr key={prop.name}>
+              <td className="px-4 py-2 font-mono text-xs text-brand">{prop.name}</td>
+              <td className="px-4 py-2 font-mono text-xs text-blue-400">{prop.type}</td>
+              <td className="px-4 py-2 font-mono text-xs text-gray-500">
+                {prop.default || '—'}
+              </td>
+              <td className="px-4 py-2 text-xs text-gray-300">{prop.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }
@@ -443,11 +480,6 @@ function TableOfContents() {
                 Footer
               </a>
             </li>
-            <li>
-              <a href="#contactform" className="hover:text-white">
-                ContactForm
-              </a>
-            </li>
           </ul>
         </div>
         <div>
@@ -507,7 +539,7 @@ function ArchitectureSection() {
               </span>
             </div>
             <h3 className="font-semibold text-white">Organisms</h3>
-            <p className="mt-1 text-xs text-gray-400">Header, Footer, ContactForm</p>
+            <p className="mt-1 text-xs text-gray-400">Header, Footer</p>
           </div>
           <div className="text-center">
             <div className="mb-2 text-2xl">
@@ -560,6 +592,18 @@ function BadgeSection() {
           <Badge variant="skill">Tailwind</Badge>
         </ComponentRow>
       </Card>
+      <PropsTable
+        props={[
+          { name: 'children', type: 'ReactNode', description: 'Contenido del badge' },
+          {
+            name: 'variant',
+            type: "'section' | 'category' | 'skill'",
+            default: "'section'",
+            description: 'Estilo visual del badge',
+          },
+          { name: 'className', type: 'string', description: 'Clases CSS adicionales' },
+        ]}
+      />
       <CodeBlock>{`<Badge variant="section">Sección</Badge>
 <Badge variant="category">Categoría</Badge>
 <Badge variant="skill">Skill</Badge>`}</CodeBlock>
@@ -610,6 +654,29 @@ function HeadingSection() {
           </div>
         </div>
       </Card>
+      <PropsTable
+        props={[
+          { name: 'children', type: 'ReactNode', description: 'Texto del titulo' },
+          {
+            name: 'level',
+            type: "'h1' | 'h2' | 'h3' | 'h4'",
+            default: "'h2'",
+            description: 'Etiqueta HTML semantica',
+          },
+          {
+            name: 'size',
+            type: "'xl' | 'lg' | 'md' | 'sm'",
+            default: "'lg'",
+            description: 'Tamano visual del texto',
+          },
+          {
+            name: 'highlight',
+            type: 'string',
+            description: 'Texto a resaltar en color brand',
+          },
+          { name: 'className', type: 'string', description: 'Clases CSS adicionales' },
+        ]}
+      />
       <CodeBlock>{`<Heading level="h1" size="xl">Título</Heading>
 <Heading level="h2" size="lg" highlight="Chasqui">
   Proyecto Chasqui II
@@ -685,6 +752,26 @@ function ButtonSection() {
           </Button>
         </ComponentRow>
       </Card>
+      <PropsTable
+        props={[
+          { name: 'children', type: 'ReactNode', description: 'Contenido del boton (texto, iconos)' },
+          {
+            name: 'variant',
+            type: "'primary' | 'outline' | 'ghost' | 'whatsapp'",
+            default: "'primary'",
+            description: 'Estilo visual',
+          },
+          {
+            name: 'size',
+            type: "'sm' | 'md' | 'lg'",
+            default: "'md'",
+            description: 'Tamano del boton',
+          },
+          { name: 'disabled', type: 'boolean', default: 'false', description: 'Desactiva el boton' },
+          { name: 'className', type: 'string', description: 'Clases CSS adicionales' },
+          { name: '...rest', type: 'ButtonHTMLAttributes', description: 'Props nativas de <button>' },
+        ]}
+      />
       <CodeBlock>{`<Button variant="primary" size="md">Click</Button>
 <Button variant="outline">
   Ver más <ArrowRightIcon className="h-4 w-4" />
@@ -732,6 +819,28 @@ function IconButtonSection() {
           </IconButton>
         </ComponentRow>
       </Card>
+      <PropsTable
+        props={[
+          { name: 'children', type: 'ReactNode', description: 'Icono del boton' },
+          {
+            name: 'variant',
+            type: "'ghost' | 'outline' | 'solid' | 'social'",
+            default: "'ghost'",
+            description: 'Estilo visual',
+          },
+          {
+            name: 'size',
+            type: "'sm' | 'md' | 'lg'",
+            default: "'md'",
+            description: 'Tamano (h-8, h-10, h-12)',
+          },
+          {
+            name: 'aria-label',
+            type: 'string',
+            description: 'Requerido para accesibilidad',
+          },
+        ]}
+      />
       <CodeBlock>{`<IconButton variant="ghost" aria-label="Settings">
   <CogIcon className="h-5 w-5" />
 </IconButton>`}</CodeBlock>
@@ -766,6 +875,20 @@ function InputSection() {
           <Input type="password" label="Password" placeholder="••••••••" />
         </div>
       </Card>
+      <PropsTable
+        props={[
+          {
+            name: 'variant',
+            type: "'default' | 'error' | 'success'",
+            default: "'default'",
+            description: 'Estado visual del campo',
+          },
+          { name: 'label', type: 'string', description: 'Label del campo' },
+          { name: 'error', type: 'string', description: 'Mensaje de error (activa variant error)' },
+          { name: 'helperText', type: 'string', description: 'Texto de ayuda debajo del campo' },
+          { name: '...rest', type: 'InputHTMLAttributes', description: 'Props nativas de <input>' },
+        ]}
+      />
       <CodeBlock>{`<Input
   label="Email"
   placeholder="tu@email.com"
@@ -794,6 +917,20 @@ function TextareaSection() {
           />
         </div>
       </Card>
+      <PropsTable
+        props={[
+          {
+            name: 'variant',
+            type: "'default' | 'error' | 'success'",
+            default: "'default'",
+            description: 'Estado visual del campo',
+          },
+          { name: 'label', type: 'string', description: 'Label del campo' },
+          { name: 'error', type: 'string', description: 'Mensaje de error' },
+          { name: 'helperText', type: 'string', description: 'Texto de ayuda' },
+          { name: '...rest', type: 'TextareaHTMLAttributes', description: 'Props nativas de <textarea>' },
+        ]}
+      />
       <CodeBlock>{`<Textarea
   label="Mensaje"
   placeholder="Escribe tu mensaje..."
@@ -828,6 +965,24 @@ function SelectSection() {
           />
         </div>
       </Card>
+      <PropsTable
+        props={[
+          {
+            name: 'options',
+            type: '{ value: string; label: string; disabled?: boolean }[]',
+            description: 'Lista de opciones del selector',
+          },
+          { name: 'placeholder', type: 'string', description: 'Texto placeholder' },
+          {
+            name: 'variant',
+            type: "'default' | 'error' | 'success'",
+            default: "'default'",
+            description: 'Estado visual',
+          },
+          { name: 'label', type: 'string', description: 'Label del campo' },
+          { name: 'error', type: 'string', description: 'Mensaje de error' },
+        ]}
+      />
       <CodeBlock>{`<Select
   label="Asunto"
   placeholder="Selecciona"
@@ -870,6 +1025,18 @@ function SpinnerSection() {
           </Button>
         </ComponentRow>
       </Card>
+      <PropsTable
+        props={[
+          {
+            name: 'size',
+            type: "'sm' | 'md' | 'lg'",
+            default: "'md'",
+            description: 'Tamano del spinner (h-4, h-8, h-12)',
+          },
+          { name: 'label', type: 'string', description: 'Texto accesible para screen readers' },
+          { name: 'className', type: 'string', description: 'Clases CSS adicionales' },
+        ]}
+      />
       <CodeBlock>{`<Spinner size="sm" />
 <Spinner size="md" />
 <Spinner size="lg" />
@@ -908,6 +1075,18 @@ function SkeletonSection() {
           </div>
         </div>
       </Card>
+      <PropsTable
+        props={[
+          {
+            name: 'variant',
+            type: "'rectangular' | 'circular' | 'text'",
+            default: "'rectangular'",
+            description: 'Forma del placeholder',
+          },
+          { name: 'lines', type: 'number', description: 'Cantidad de lineas (solo variant text)' },
+          { name: 'className', type: 'string', description: 'Controla tamano con h-* w-*' },
+        ]}
+      />
       <CodeBlock>{`<Skeleton variant="rectangular" className="h-32 w-full" />
 <Skeleton variant="circular" className="h-16 w-16" />
 <Skeleton variant="text" className="h-4 w-full" />`}</CodeBlock>
@@ -948,6 +1127,26 @@ function CardSection() {
           </Card>
         </div>
       </div>
+      <PropsTable
+        props={[
+          {
+            name: 'variant',
+            type: "'glass' | 'solid'",
+            default: "'glass'",
+            description: 'Glassmorphism o fondo solido',
+          },
+          { name: 'hover', type: 'boolean', default: 'true', description: 'Efecto hover con elevacion' },
+          {
+            name: 'padding',
+            type: "'none' | 'sm' | 'md' | 'lg'",
+            default: "'md'",
+            description: 'Padding interno (0, p-4, p-6, p-8)',
+          },
+          { name: 'as', type: "'div' | 'article'", default: "'div'", description: 'Etiqueta HTML semantica' },
+          { name: 'children', type: 'ReactNode', description: 'Contenido de la card' },
+          { name: 'className', type: 'string', description: 'Clases CSS adicionales' },
+        ]}
+      />
       <CodeBlock>{`<Card variant="glass" hover={true} padding="md">
   <h3>Título</h3>
   <p>Contenido</p>
@@ -986,6 +1185,23 @@ function ModalSection() {
           </Button>
         </div>
       </Modal>
+      <PropsTable
+        props={[
+          { name: 'isOpen', type: 'boolean', description: 'Controla visibilidad del modal' },
+          { name: 'onClose', type: '() => void', description: 'Callback al cerrar' },
+          { name: 'title', type: 'string', description: 'Titulo del modal' },
+          {
+            name: 'size',
+            type: "'sm' | 'md' | 'lg' | 'xl' | 'full'",
+            default: "'md'",
+            description: 'Ancho del modal',
+          },
+          { name: 'closeOnOverlayClick', type: 'boolean', default: 'true', description: 'Cerrar al click fuera' },
+          { name: 'closeOnEscape', type: 'boolean', default: 'true', description: 'Cerrar con Escape' },
+          { name: 'showCloseButton', type: 'boolean', default: 'true', description: 'Mostrar boton X' },
+          { name: 'children', type: 'ReactNode', description: 'Contenido del modal' },
+        ]}
+      />
       <CodeBlock>{`const { isOpen, open, close } = useModal()
 
 <Button onClick={open}>Abrir</Button>
@@ -1028,6 +1244,19 @@ function TooltipSection() {
           </Tooltip>
         </ComponentRow>
       </Card>
+      <PropsTable
+        props={[
+          { name: 'content', type: 'string', description: 'Texto del tooltip' },
+          {
+            name: 'position',
+            type: "'top' | 'bottom' | 'left' | 'right'",
+            default: "'top'",
+            description: 'Posicion relativa al hijo',
+          },
+          { name: 'delay', type: 'number', default: '0', description: 'Delay antes de mostrar (ms)' },
+          { name: 'children', type: 'ReactElement', description: 'Elemento que activa el tooltip' },
+        ]}
+      />
       <CodeBlock>{`<Tooltip content="Info útil" position="top">
   <Button>Hover me</Button>
 </Tooltip>`}</CodeBlock>
@@ -1078,6 +1307,17 @@ function ToastSection() {
           </Button>
         </ComponentRow>
       </Card>
+      <PropsTable
+        props={[
+          { name: 'message', type: 'string', description: 'Texto de la notificacion' },
+          {
+            name: 'variant',
+            type: "'success' | 'error' | 'warning' | 'info'",
+            description: 'Tipo de notificacion',
+          },
+          { name: 'duration', type: 'number', default: '5000', description: 'Duracion en ms antes de cerrar' },
+        ]}
+      />
       <CodeBlock>{`// En root.tsx o layout
 <ToastProvider>
   <App />
@@ -1112,6 +1352,17 @@ function BreadcrumbSection() {
           <Breadcrumb items={items} showHomeIcon />
         </ComponentRow>
       </Card>
+      <PropsTable
+        props={[
+          {
+            name: 'items',
+            type: '{ label: string; href?: string; icon?: ReactNode }[]',
+            description: 'Lista de niveles de navegacion',
+          },
+          { name: 'separator', type: 'ReactNode', default: 'ChevronRight', description: 'Separador entre items' },
+          { name: 'showHomeIcon', type: 'boolean', default: 'false', description: 'Mostrar icono home al inicio' },
+        ]}
+      />
       <CodeBlock>{`<Breadcrumb items={[
   { label: 'Inicio', href: '/' },
   { label: 'Proyecto', href: '/proyecto' },
@@ -1139,6 +1390,15 @@ function PaginationSection() {
           <Pagination currentPage={2} totalPages={3} onPageChange={() => {}} />
         </ComponentRow>
       </Card>
+      <PropsTable
+        props={[
+          { name: 'currentPage', type: 'number', description: 'Pagina activa actual' },
+          { name: 'totalPages', type: 'number', description: 'Total de paginas' },
+          { name: 'onPageChange', type: '(page: number) => void', description: 'Callback al cambiar pagina' },
+          { name: 'siblingCount', type: 'number', default: '1', description: 'Paginas visibles a cada lado' },
+          { name: 'showFirstLast', type: 'boolean', default: 'true', description: 'Mostrar botones primera/ultima' },
+        ]}
+      />
       <CodeBlock>{`<Pagination
   currentPage={page}
   totalPages={10}
@@ -1164,6 +1424,24 @@ function EmptyStateSection() {
           size="md"
         />
       </Card>
+      <PropsTable
+        props={[
+          { name: 'title', type: 'string', description: 'Texto principal' },
+          { name: 'description', type: 'string', description: 'Texto descriptivo' },
+          { name: 'icon', type: 'ReactNode', description: 'Icono personalizado' },
+          {
+            name: 'action',
+            type: '{ label: string; onClick: () => void; variant?: ButtonVariant }',
+            description: 'Boton de accion',
+          },
+          {
+            name: 'size',
+            type: "'sm' | 'md' | 'lg'",
+            default: "'md'",
+            description: 'Tamano del componente',
+          },
+        ]}
+      />
       <CodeBlock>{`<EmptyState
   icon={<FolderIcon className="h-12 w-12" />}
   title="No hay proyectos"
@@ -1190,6 +1468,21 @@ function SectionHeaderSection() {
           align="center"
         />
       </Card>
+      <PropsTable
+        props={[
+          { name: 'badge', type: 'string', description: 'Texto del badge superior' },
+          { name: 'title', type: 'string', description: 'Titulo de la seccion' },
+          { name: 'highlight', type: 'string', description: 'Palabra a resaltar en color brand' },
+          { name: 'description', type: 'string', description: 'Texto descriptivo' },
+          {
+            name: 'align',
+            type: "'left' | 'center'",
+            default: "'center'",
+            description: 'Alineacion del texto',
+          },
+          { name: 'animated', type: 'boolean', default: 'true', description: 'Animacion FadeInView' },
+        ]}
+      />
       <CodeBlock>{`<SectionHeader
   badge="Noticias"
   title="Últimas"
@@ -1246,15 +1539,28 @@ function ProductCardSection() {
           outOfStockLabel="Agotado"
         />
       </div>
+      <PropsTable
+        props={[
+          { name: 'name', type: 'string', description: 'Nombre del producto' },
+          { name: 'description', type: 'string', description: 'Descripcion del producto' },
+          { name: 'price', type: 'number', description: 'Precio en soles (S/.)' },
+          { name: 'imageUrl', type: 'string', description: 'URL de la imagen principal' },
+          { name: 'gallery', type: 'string[]', description: 'URLs de imagenes para carousel' },
+          { name: 'inStock', type: 'boolean', default: 'true', description: 'Disponibilidad' },
+          { name: 'buyLink', type: 'string', description: 'URL del enlace de compra (WhatsApp)' },
+          { name: 'buyLabel', type: 'string', description: 'Texto del boton de compra' },
+          { name: 'outOfStockLabel', type: 'string', description: 'Texto cuando no hay stock' },
+        ]}
+      />
       <CodeBlock>{`<ProductCard
   name="Camiseta Chasqui II"
   description="Camiseta oficial del proyecto"
   price={45.00}
   imageUrl="/assets/img/product.jpg"
+  gallery={["/img/2.jpg", "/img/3.jpg"]}
   inStock={true}
   buyLink="https://wa.me/..."
   buyLabel="Comprar"
-  outOfStockLabel="Agotado"
 />`}</CodeBlock>
     </SectionWrapper>
   )
@@ -1295,6 +1601,22 @@ function NewsCardSection() {
           publishedAt="5 de febrero, 2026"
         />
       </Card>
+      <PropsTable
+        props={[
+          { name: 'title', type: 'string', description: 'Titulo de la noticia' },
+          { name: 'excerpt', type: 'string', description: 'Resumen del articulo' },
+          { name: 'href', type: 'string', description: 'URL del articulo' },
+          { name: 'imageUrl', type: 'string', description: 'URL de la imagen' },
+          {
+            name: 'category',
+            type: "{ name: string; color?: 'purple' | 'blue' | 'green' | 'yellow' | 'red' }",
+            description: 'Categoria con color',
+          },
+          { name: 'publishedAt', type: 'string', description: 'Fecha de publicacion formateada' },
+          { name: 'readMoreLabel', type: 'string', description: 'Texto del enlace leer mas' },
+          { name: 'featured', type: 'boolean', default: 'false', description: 'Layout destacado horizontal' },
+        ]}
+      />
       <CodeBlock>{`<NewsCard
   title="Título de la noticia"
   excerpt="Resumen del artículo..."
@@ -1373,30 +1695,6 @@ function FooterSection() {
 
 <Footer />
 // Incluye: Logo, tagline, social links, copyright`}</CodeBlock>
-    </SectionWrapper>
-  )
-}
-
-function ContactFormSection() {
-  return (
-    <SectionWrapper
-      id="contactform"
-      title="ContactForm"
-      description="Formulario de contacto completo con validación, i18n y estados."
-    >
-      <Card variant="solid" hover={false} padding="lg">
-        <div className="mx-auto max-w-md">
-          <ContactForm showSubject={false} />
-        </div>
-      </Card>
-      <CodeBlock>{`import { ContactForm } from '~/components/ui/organisms'
-
-<ContactForm
-  onSubmit={async (data) => {
-    await sendEmail(data)
-  }}
-  showSubject={true}
-/>`}</CodeBlock>
     </SectionWrapper>
   )
 }

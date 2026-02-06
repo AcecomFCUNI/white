@@ -7,4 +7,3 @@
 
 export { Header } from './Header'
 export { Footer } from './Footer'
-export { ContactForm, type ContactFormData, type ContactFormProps } from './ContactForm'
