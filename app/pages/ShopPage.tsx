@@ -1,68 +1,48 @@
 /**
  * Shop Page Component
- * Products redirect to WhatsApp for purchase
+ * Products fetched from Sanity CMS, redirect to WhatsApp for purchase
  * Supports both Spanish and English
  */
 
 import { useTranslation } from 'react-i18next'
 import { Header } from '~/sections/shared'
+import { LinkButton } from '~/components/ui/atoms'
 import { StoryContact } from '~/sections/story'
 import { FadeInView } from '~/components/animations'
 import { StarField } from '~/components/effects/StarField'
 import { NebulaOrb } from '~/components/effects/Nebula'
+import { getLocalizedValue } from '~/sanity/lib'
 
-const products = [
-  {
-    id: 'mug',
-    nameKey: 'shop.products.mug.name',
-    price: 'S/. 12.00',
-    descriptionKey: 'shop.products.mug.description',
-    image: '/assets/img/merch/taza.png'
-  },
-  {
-    id: 'keychain',
-    nameKey: 'shop.products.keychain.name',
-    price: 'S/. 5.00',
-    descriptionKey: 'shop.products.keychain.description',
-    image: '/assets/img/merch/llavero.png'
-  },
-  {
-    id: 'shirt',
-    nameKey: 'shop.products.shirt.name',
-    price: 'S/. 50.00',
-    descriptionKey: 'shop.products.shirt.description',
-    image: '/assets/img/merch/polo.png'
-  },
-  {
-    id: 'stickers',
-    nameKey: 'shop.products.stickers.name',
-    price: 'S/. 8.00',
-    descriptionKey: 'shop.products.stickers.description',
-    image: '/assets/img/merch/stickers.png'
-  },
-  {
-    id: 'cap',
-    nameKey: 'shop.products.cap.name',
-    price: 'S/. 25.00',
-    descriptionKey: 'shop.products.cap.description',
-    image: '/assets/img/merch/gorra.png'
-  },
-  {
-    id: 'notebook',
-    nameKey: 'shop.products.notebook.name',
-    price: 'S/. 15.00',
-    descriptionKey: 'shop.products.notebook.description',
-    image: '/assets/img/merch/libreta.png'
+// Type for Sanity product
+export interface SanityProduct {
+  _id: string
+  name: { es?: string; en?: string }
+  slug: { current: string }
+  description: { es?: string; en?: string }
+  price: number
+  inStock: boolean
+  featured: boolean
+  image?: {
+    asset: {
+      _id: string
+      url: string
+    }
   }
-]
+}
+
+interface ShopPageProps {
+  products?: SanityProduct[]
+  lang?: string
+}
 
 const WHATSAPP_NUMBER = '519XXXXXXXX' // Replace with actual number
 
-export function ShopPage() {
+export function ShopPage({ products = [], lang }: ShopPageProps) {
   const { t, i18n } = useTranslation()
+  const currentLang = lang || i18n.language
 
   function getWhatsAppLink(productName: string) {
-    const message = i18n.language === 'en'
+    const message = currentLang === 'en'
       ? `Hello, I'm interested in buying: ${productName} from the Chasqui II project`
       : `Hola, me interesa comprar: ${productName} del proyecto Chasqui II`
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
@@ -116,55 +96,76 @@ export function ShopPage() {
           </div>
 
           <div className="relative z-10 mx-auto max-w-6xl px-4">
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {products.map((product, index) => (
-                <FadeInView
-                  key={product.id}
-                  direction="up"
-                  delay={index * 0.1}
-                  className="h-full"
-                >
-                  <div className="group flex h-full flex-col overflow-hidden rounded-xl border border-gray-800 bg-gray-900/50 backdrop-blur-sm transition-all hover:border-brand/50">
-                    {/* Image */}
-                    <div className="aspect-square overflow-hidden bg-gray-800">
-                      <img
-                        src={product.image}
-                        alt={t(product.nameKey)}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src =
-                            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Crect fill='%231f2937' width='300' height='300'/%3E%3Ctext fill='%236b7280' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='sans-serif' font-size='14'%3EImage not available%3C/text%3E%3C/svg%3E"
-                        }}
-                      />
-                    </div>
+            {products.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-400 text-lg">
+                  {currentLang === 'en' ? 'No products available yet.' : 'No hay productos disponibles aún.'}
+                </p>
+              </div>
+            ) : (
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {products.map((product, index) => {
+                  const name = getLocalizedValue(product.name, currentLang) || ''
+                  const description = getLocalizedValue(product.description, currentLang) || ''
+                  const imageUrl = product.image?.asset?.url
 
-                    {/* Info */}
-                    <div className="flex flex-1 flex-col p-4">
-                      <h3 className="mb-1 font-montserrat text-lg font-semibold text-white">
-                        {t(product.nameKey)}
-                      </h3>
-                      <p className="mb-3 flex-1 text-sm text-gray-400">
-                        {t(product.descriptionKey)}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xl font-bold text-brand">
-                          {product.price}
-                        </span>
-                        <a
-                          href={getWhatsAppLink(t(product.nameKey))}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-medium text-white transition-all hover:bg-[#1fb855]"
-                        >
-                          <WhatsAppIcon className="h-4 w-4" />
-                          {t('shop.buyButton')}
-                        </a>
+                  return (
+                    <FadeInView
+                      key={product._id}
+                      direction="up"
+                      delay={index * 0.1}
+                      className="h-full"
+                    >
+                      <div className="group flex h-full flex-col overflow-hidden rounded-xl border border-gray-800 bg-gray-900/50 backdrop-blur-sm transition-all hover:border-brand/50">
+                        {/* Image */}
+                        <div className="aspect-square overflow-hidden bg-gray-800">
+                          <img
+                            src={imageUrl || '/assets/img/merch/placeholder.png'}
+                            alt={name}
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src =
+                                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Crect fill='%231f2937' width='300' height='300'/%3E%3Ctext fill='%236b7280' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='sans-serif' font-size='14'%3EImage not available%3C/text%3E%3C/svg%3E"
+                            }}
+                          />
+                        </div>
+
+                        {/* Info */}
+                        <div className="flex flex-1 flex-col p-4">
+                          <h3 className="mb-1 font-montserrat text-lg font-semibold text-white">
+                            {name}
+                          </h3>
+                          <p className="mb-3 flex-1 text-sm text-gray-400">
+                            {description}
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xl font-bold text-brand">
+                              S/. {product.price.toFixed(2)}
+                            </span>
+                            {product.inStock ? (
+                              <LinkButton
+                                href={getWhatsAppLink(name)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                variant="whatsapp"
+                                size="sm"
+                              >
+                                <WhatsAppIcon className="h-4 w-4" />
+                                {t('shop.buyButton')}
+                              </LinkButton>
+                            ) : (
+                              <span className="rounded-full bg-gray-700 px-4 py-2 text-sm text-gray-400">
+                                {currentLang === 'en' ? 'Out of stock' : 'Agotado'}
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </FadeInView>
-              ))}
-            </div>
+                    </FadeInView>
+                  )
+                })}
+              </div>
+            )}
 
             {/* Info banner */}
             <FadeInView direction="up" className="mt-12">

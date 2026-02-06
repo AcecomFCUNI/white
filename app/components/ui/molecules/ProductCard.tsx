@@ -55,12 +55,18 @@ export function ProductCard({
     setCurrentIndex((prev) => (prev - 1 + allImages.length) % allImages.length)
   }
 
+  // Reset to main image when mouse leaves the card
+  const resetToMainImage = () => {
+    setCurrentIndex(0)
+  }
+
   return (
     <article
       className={cn(
         'group flex h-full flex-col overflow-hidden rounded-xl border border-gray-800 bg-gray-900/50 backdrop-blur-sm transition-all hover:border-brand/50',
         className
       )}
+      onMouseLeave={resetToMainImage}
     >
       {/* Image Carousel */}
       <div className="relative aspect-square overflow-hidden bg-gray-800">

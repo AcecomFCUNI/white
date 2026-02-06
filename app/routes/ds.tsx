@@ -6,7 +6,7 @@
  *
  * Estructura:
  * - Atoms: Badge, Button, Heading, IconButton, Input, Textarea, Select, Spinner, Skeleton
- * - Molecules: Card, Modal, Tooltip, Toast, Breadcrumb, Pagination, EmptyState, SectionHeader
+ * - Molecules: Card, Modal, Tooltip, Toast, Breadcrumb, Pagination, EmptyState, SectionHeader, ProductCard, NewsCard
  * - Organisms: Header, Footer, ContactForm
  */
 
@@ -39,6 +39,8 @@ import {
   Pagination,
   EmptyState,
   SectionHeader,
+  ProductCard,
+  NewsCard,
 } from '~/components/ui/molecules'
 
 // Organisms
@@ -93,7 +95,7 @@ export default function DesignSystemPage() {
           {/* Stats */}
           <div className="mb-16 grid gap-4 sm:grid-cols-4">
             <StatCard number="9" label="Atoms" color="brand" />
-            <StatCard number="8" label="Molecules" color="blue" />
+            <StatCard number="10" label="Molecules" color="blue" />
             <StatCard number="3" label="Organisms" color="green" />
             <StatCard number="2" label="Hooks" color="purple" />
           </div>
@@ -143,6 +145,8 @@ export default function DesignSystemPage() {
               <EmptyStateSection />
               <SectionHeaderSection />
               <LanguageSelectorSection />
+              <ProductCardSection />
+              <NewsCardSection />
             </div>
           </div>
 
@@ -412,6 +416,16 @@ function TableOfContents() {
             <li>
               <a href="#sectionheader" className="hover:text-white">
                 SectionHeader
+              </a>
+            </li>
+            <li>
+              <a href="#productcard" className="hover:text-white">
+                ProductCard
+              </a>
+            </li>
+            <li>
+              <a href="#newscard" className="hover:text-white">
+                NewsCard
               </a>
             </li>
           </ul>
@@ -1204,6 +1218,93 @@ function LanguageSelectorSection() {
       </Card>
       <CodeBlock>{`<LanguageSelector />
 // Cambia URL automáticamente: /es/... ↔ /en/...`}</CodeBlock>
+    </SectionWrapper>
+  )
+}
+
+function ProductCardSection() {
+  return (
+    <SectionWrapper
+      id="productcard"
+      title="ProductCard"
+      description="Card para productos de la tienda con imagen, precio y botón de WhatsApp."
+    >
+      <div className="grid gap-6 md:grid-cols-2">
+        <ProductCard
+          name="Camiseta Chasqui II"
+          description="Camiseta oficial del proyecto con logo bordado."
+          price={45.00}
+          inStock={true}
+          buyLink="#"
+          buyLabel="Comprar"
+        />
+        <ProductCard
+          name="Producto Agotado"
+          description="Este producto no está disponible."
+          price={30.00}
+          inStock={false}
+          outOfStockLabel="Agotado"
+        />
+      </div>
+      <CodeBlock>{`<ProductCard
+  name="Camiseta Chasqui II"
+  description="Camiseta oficial del proyecto"
+  price={45.00}
+  imageUrl="/assets/img/product.jpg"
+  inStock={true}
+  buyLink="https://wa.me/..."
+  buyLabel="Comprar"
+  outOfStockLabel="Agotado"
+/>`}</CodeBlock>
+    </SectionWrapper>
+  )
+}
+
+function NewsCardSection() {
+  return (
+    <SectionWrapper
+      id="newscard"
+      title="NewsCard"
+      description="Card para artículos de noticias con imagen, categoría, fecha y enlace."
+    >
+      <div className="grid gap-6 md:grid-cols-2">
+        <NewsCard
+          title="Chasqui II en FLIT 2024"
+          excerpt="Nuestro equipo participó activamente presentando los avances del proyecto."
+          href="#"
+          category={{ name: 'Evento', color: 'purple' }}
+          publishedAt="15 de noviembre, 2024"
+          readMoreLabel="Leer más"
+        />
+        <NewsCard
+          title="Avances en comunicaciones"
+          excerpt="El equipo de COMMS completó pruebas de enlace exitosas."
+          href="#"
+          category={{ name: 'Técnico', color: 'blue' }}
+          publishedAt="10 de octubre, 2024"
+        />
+      </div>
+      <Card variant="solid" hover={false} padding="md" className="mt-6">
+        <span className="mb-2 block font-mono text-xs text-gray-500">featured=true</span>
+        <NewsCard
+          featured
+          title="Noticia Destacada"
+          excerpt="Las noticias destacadas tienen un layout horizontal más prominente."
+          href="#"
+          category={{ name: 'Internacional', color: 'yellow' }}
+          publishedAt="5 de febrero, 2026"
+        />
+      </Card>
+      <CodeBlock>{`<NewsCard
+  title="Título de la noticia"
+  excerpt="Resumen del artículo..."
+  href="/es/noticias/slug"
+  imageUrl="/assets/img/news.jpg"
+  category={{ name: 'Evento', color: 'purple' }}
+  publishedAt="15 de noviembre, 2024"
+  readMoreLabel="Leer más"
+  featured={false}
+/>`}</CodeBlock>
     </SectionWrapper>
   )
 }
