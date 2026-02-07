@@ -3,15 +3,18 @@
  * Full-screen hero with animated starfield and logo reveal
  */
 
-import { useRef } from 'react'
+import { lazy, Suspense, useRef } from 'react'
 import { m, useScroll, useTransform } from 'motion/react'
 import { StarField } from '~/components/effects/StarField'
 import { Nebula } from '~/components/effects/Nebula'
 import { FadeInView } from '~/components/animations/FadeInView'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
-import { GlobeCap } from '~/components/effects/GlobeCap'
 import { useTranslation } from 'react-i18next'
 import { GLOBE_CONFIG } from '~/lib/constants'
+
+const GlobeCap = lazy(() =>
+  import('~/components/effects/GlobeCap').then(mod => ({ default: mod.GlobeCap }))
+)
 
 export function StoryHero () {
   const { t } = useTranslation()
@@ -105,20 +108,22 @@ export function StoryHero () {
         transition={{ duration: 2, delay: 0.3, ease: "easeOut" }}
       >
         <div className="relative w-full h-full">
-          <GlobeCap
-            width={GLOBE_CONFIG.cap.width}
-            height={GLOBE_CONFIG.cap.height}
-            visibleCapHeight={GLOBE_CONFIG.cap.visibleCapHeight}
-            autoRotate={true}
-            rotationSpeed={GLOBE_CONFIG.animation.rotationSpeed}
-            strokeColor={GLOBE_CONFIG.style.strokeColor}
-            strokeWidth={GLOBE_CONFIG.style.strokeWidth}
-            fillColor={GLOBE_CONFIG.style.fillColor}
-            oceanColor={GLOBE_CONFIG.style.oceanColor}
-            showSatellite={true}
-            satelliteOrbitSpeed={GLOBE_CONFIG.animation.satelliteOrbitSpeed}
-            className="absolute bottom-0 left-1/2 -translate-x-1/2"
-          />
+          <Suspense fallback={null}>
+            <GlobeCap
+              width={GLOBE_CONFIG.cap.width}
+              height={GLOBE_CONFIG.cap.height}
+              visibleCapHeight={GLOBE_CONFIG.cap.visibleCapHeight}
+              autoRotate={true}
+              rotationSpeed={GLOBE_CONFIG.animation.rotationSpeed}
+              strokeColor={GLOBE_CONFIG.style.strokeColor}
+              strokeWidth={GLOBE_CONFIG.style.strokeWidth}
+              fillColor={GLOBE_CONFIG.style.fillColor}
+              oceanColor={GLOBE_CONFIG.style.oceanColor}
+              showSatellite={true}
+              satelliteOrbitSpeed={GLOBE_CONFIG.animation.satelliteOrbitSpeed}
+              className="absolute bottom-0 left-1/2 -translate-x-1/2"
+            />
+          </Suspense>
           {/* Fade overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none" />
         </div>

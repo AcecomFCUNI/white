@@ -14,6 +14,9 @@ import { SmoothScroll } from '~/components/layout'
 import { supportedLanguages, defaultLanguage, type Language } from '~/lib/i18n-routes'
 import '~/assets/css/style.css'
 import './tailwind.css'
+// Self-hosted variable fonts (eliminates Google Fonts CDN roundtrip)
+import '@fontsource-variable/open-sans'
+import '@fontsource-variable/montserrat'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/autoplay'
@@ -25,14 +28,6 @@ export const links: LinksFunction = () => {
   return [
     // PWA Manifest
     { rel: 'manifest', href: '/manifest.json' },
-    // Preconnect to font servers (before stylesheet for faster connection)
-    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' as const },
-    // Google Fonts
-    {
-      rel: 'stylesheet',
-      href: 'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap'
-    },
   ]
 }
 

@@ -1,11 +1,12 @@
 /**
  * Motion (Framer Motion) configuration for optimized bundle size
- * Using LazyMotion with domAnimation features (~5KB)
+ * Using LazyMotion with async-loaded domAnimation features
+ * The features (~29KB) are loaded after initial render, not in the main bundle.
  */
 
-import { domAnimation } from 'motion/react'
-
-export const motionFeatures = domAnimation
+// Async feature loader — not included in initial JS bundle
+export const motionFeatures = () =>
+  import('motion/react').then((mod) => mod.domAnimation)
 
 // Re-export commonly used utilities
 export {

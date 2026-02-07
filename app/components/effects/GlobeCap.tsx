@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import * as d3 from "d3";
+import { select } from "d3-selection";
+import { geoOrthographic, geoPath } from "d3-geo";
+import { drag } from "d3-drag";
 import * as topojson from "topojson-client";
 import type { Topology, GeometryCollection } from "topojson-specification";
 import { useReducedMotion } from "~/hooks";
@@ -105,7 +107,7 @@ export function GlobeCap({
   useEffect(() => {
     if (!worldData || !svgRef.current) return;
 
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
     svg.selectAll("*").remove();
 
     // Create clip path to constrain rendering to visible area
@@ -119,13 +121,12 @@ export function GlobeCap({
       .attr("width", width)
       .attr("height", height);
 
-    const projection = d3
-      .geoOrthographic()
+    const projection = geoOrthographic()
       .scale(globeScale)
       .translate([width / 2, centerY])
       .rotate([rotationRef.current.x, rotationRef.current.y]);
 
-    const path = d3.geoPath().projection(projection);
+    const path = geoPath().projection(projection);
 
     const countries = topojson.feature(
       worldData,
@@ -337,8 +338,7 @@ export function GlobeCap({
     }
 
     // Drag interaction
-    const drag = d3
-      .drag<SVGSVGElement, unknown>()
+    const dragBehavior = drag<SVGSVGElement, unknown>()
       .on("start", () => {
         isDraggingRef.current = true;
       })
@@ -356,7 +356,7 @@ export function GlobeCap({
         isDraggingRef.current = false;
       });
 
-    svg.call(drag);
+    svg.call(dragBehavior);
 
     return () => {
       if (animationId) cancelAnimationFrame(animationId);

@@ -57,6 +57,7 @@ export function Header() {
           {/* Logo */}
           <RemixLink
             to={getLocalizedPath('home', currentLang)}
+            prefetch="intent"
             className="flex items-center gap-2 transition-opacity hover:opacity-80"
           >
             <img src="/assets/img/logo.png" alt="Chasqui II" className="h-8 w-8 md:h-10 md:w-10" />
@@ -125,6 +126,7 @@ export function Header() {
                     <li key={item.routeKey}>
                       <RemixLink
                         to={path}
+                        prefetch="intent"
                         className={`block py-2 text-lg font-medium transition-colors ${
                           location.pathname === path
                             ? 'text-brand'
@@ -167,6 +169,7 @@ function NavLink({ href, isActive, children }: NavLinkProps) {
   return (
     <RemixLink
       to={href}
+      prefetch="intent"
       className={`relative text-sm font-medium transition-colors ${
         isActive ? 'text-white' : 'text-gray-300 hover:text-white'
       }`}

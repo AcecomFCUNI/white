@@ -5,11 +5,9 @@
  * Used in Remix loaders to fetch content from Sanity.
  */
 import { loadQuery, setServerClient } from '@sanity/react-loader'
-import { client } from './client'
 import { getAuthenticatedClient } from './client.server'
 
 // Initialize the server client with authentication for previews
-const serverClient = getAuthenticatedClient()
-setServerClient(serverClient)
+setServerClient(getAuthenticatedClient())
 
 export { loadQuery }

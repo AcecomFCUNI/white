@@ -36,8 +36,8 @@ export default {
         },
       },
       fontFamily: {
-        montserrat: ['Montserrat', 'sans-serif'],
-        opensans: ['Open Sans', 'sans-serif'],
+        montserrat: ['Montserrat Variable', 'Montserrat', 'sans-serif'],
+        opensans: ['Open Sans Variable', 'Open Sans', 'sans-serif'],
       },
       backdropBlur: {
         xs: '2px',

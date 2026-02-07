@@ -1,14 +1,12 @@
 /**
  * Sanity Library Exports
  *
- * Central export point for Sanity utilities.
+ * Client-safe barrel: only exports that don't pull in @sanity/client.
+ * For the Sanity client, import directly from './client.server'.
  */
 
-// Client (browser-safe)
-export { client, projectId, dataset, apiVersion } from './client'
+// Utilities (client-safe, no Sanity SDK dependency)
+export { getLocalizedValue } from './utils'
 
-// Image helpers
-export { urlFor, getLocalizedValue } from './image'
-
-// Queries
+// Queries (client-safe, only uses groq)
 export * from './queries'

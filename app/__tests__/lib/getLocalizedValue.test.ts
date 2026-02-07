@@ -1,18 +1,5 @@
-import { describe, it, expect, vi } from 'vitest'
-
-// Mock the Sanity client to avoid real connections
-vi.mock('~/sanity/lib/client', () => ({
-  client: { config: () => ({ projectId: 'test', dataset: 'test' }) },
-  projectId: 'test',
-  dataset: 'test',
-  apiVersion: '2024-01-01',
-}))
-
-vi.mock('@sanity/image-url', () => ({
-  createImageUrlBuilder: vi.fn(() => ({ image: vi.fn() })),
-}))
-
-import { getLocalizedValue } from '~/sanity/lib/image'
+import { describe, it, expect } from 'vitest'
+import { getLocalizedValue } from '~/sanity/lib/utils'
 
 describe('getLocalizedValue()', () => {
   it('returns Spanish value when lang is es', () => {

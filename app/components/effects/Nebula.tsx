@@ -50,7 +50,7 @@ export function Nebula ({
     return (
       <div
         className={`absolute inset-0 pointer-events-none ${className}`}
-        style={{ background: style.gradient }}
+        style={{ background: style.gradient, contain: 'layout style paint' }}
       />
     )
   }
@@ -61,7 +61,9 @@ export function Nebula ({
       style={{
         background: style.gradient,
         rotate,
-        scale
+        scale,
+        contain: 'layout style paint',
+        willChange: 'transform',
       }}
     />
   )
@@ -93,9 +95,11 @@ export function NebulaOrb ({
         height: size,
         left: position.x,
         top: position.y,
-        transform: 'translate(-50%, -50%)',
+        transform: 'translate(-50%, -50%) translateZ(0)',
         background: color,
-        filter: `blur(${blur}px)`
+        filter: `blur(${blur}px)`,
+        contain: 'layout style paint',
+        willChange: 'transform, opacity',
       }}
     />
   )

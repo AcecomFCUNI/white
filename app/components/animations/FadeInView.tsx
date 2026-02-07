@@ -1,14 +1,14 @@
 /**
  * FadeInView component
- * Animates children when they enter the viewport
+ * Animates children when they enter the viewport using CSS transitions.
+ * Zero JS animation library dependency — uses IntersectionObserver.
  *
  * Respects user's prefers-reduced-motion setting:
  * - When reduced motion is enabled, content appears instantly
  */
 
-import { type ReactNode } from 'react'
-import { m } from 'motion/react'
-import { useInView } from 'react-intersection-observer'
+import { useRef, useEffect, useState, type ReactNode, createElement } from 'react'
+import { cn } from '~/lib/utils'
 import { useReducedMotion } from '~/hooks'
 
 type Direction = 'up' | 'down' | 'left' | 'right' | 'none';
@@ -22,37 +22,28 @@ interface FadeInViewProps {
   className?: string;
   once?: boolean;
   threshold?: number;
-  as?: keyof JSX.IntrinsicElements;
+  as?: string;
 }
 
-const getInitialPosition = (direction: Direction, distance: number) => {
+const getInitialStyles = (direction: Direction, distance: number): React.CSSProperties => {
   switch (direction) {
     case 'up':
-      return { y: distance, opacity: 0 }
+      return { opacity: 0, transform: `translateY(${distance}px)` }
     case 'down':
-      return { y: -distance, opacity: 0 }
+      return { opacity: 0, transform: `translateY(-${distance}px)` }
     case 'left':
-      return { x: distance, opacity: 0 }
+      return { opacity: 0, transform: `translateX(${distance}px)` }
     case 'right':
-      return { x: -distance, opacity: 0 }
+      return { opacity: 0, transform: `translateX(-${distance}px)` }
     case 'none':
     default:
       return { opacity: 0 }
   }
 }
 
-const getFinalPosition = (direction: Direction) => {
-  switch (direction) {
-    case 'up':
-    case 'down':
-      return { y: 0, opacity: 1 }
-    case 'left':
-    case 'right':
-      return { x: 0, opacity: 1 }
-    case 'none':
-    default:
-      return { opacity: 1 }
-  }
+const visibleStyles: React.CSSProperties = {
+  opacity: 1,
+  transform: 'translate(0)',
 }
 
 export function FadeInView ({
@@ -64,39 +55,41 @@ export function FadeInView ({
   className = '',
   once = true,
   threshold = 0.1,
-  as = 'div'
+  as: Tag = 'div'
 }: FadeInViewProps) {
   const prefersReducedMotion = useReducedMotion()
-  const { ref, inView } = useInView({
-    threshold,
-    triggerOnce: once
-  })
+  const ref = useRef<HTMLElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const Component = m[as as keyof typeof m] as React.ComponentType<any>
+  useEffect(() => {
+    const el = ref.current
+    if (!el || prefersReducedMotion) return
 
-  // Skip animation if user prefers reduced motion
-  if (prefersReducedMotion) {
-    return (
-      <Component ref={ref} className={className}>
-        {children}
-      </Component>
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          if (once) observer.unobserve(el)
+        } else if (!once) {
+          setIsVisible(false)
+        }
+      },
+      { threshold }
     )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [once, threshold, prefersReducedMotion])
+
+  if (prefersReducedMotion) {
+    return createElement(Tag, { className }, children)
   }
 
-  return (
-    <Component
-      ref={ref}
-      initial={getInitialPosition(direction, distance)}
-      animate={inView ? getFinalPosition(direction) : getInitialPosition(direction, distance)}
-      transition={{
-        duration,
-        delay,
-        ease: [0.25, 0.1, 0.25, 1]
-      }}
-      className={className}
-    >
-      {children}
-    </Component>
-  )
+  const style: React.CSSProperties = {
+    ...(isVisible ? visibleStyles : getInitialStyles(direction, distance)),
+    transition: `opacity ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1) ${delay}s, transform ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1) ${delay}s`,
+    willChange: isVisible ? 'auto' : 'opacity, transform',
+  }
+
+  return createElement(Tag, { ref, className: cn(className), style }, children)
 }

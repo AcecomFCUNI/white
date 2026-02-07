@@ -18,8 +18,8 @@ import {
 import { ScrollProgress } from '~/components/animations'
 import { validateLang } from '~/lib/i18n-routes'
 import { RouteErrorBoundary } from '~/components/shared'
-import { client, getLocalizedValue } from '~/sanity/lib'
-import { HOME_PRODUCTS_QUERY } from '~/sanity/lib/queries'
+import { client } from '~/sanity/lib/client.server'
+import { getLocalizedValue, HOME_PRODUCTS_QUERY } from '~/sanity/lib'
 import type { HomeProduct } from '~/types'
 
 export async function loader({ params }: LoaderFunctionArgs) {

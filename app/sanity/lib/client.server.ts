@@ -1,10 +1,22 @@
 /**
- * Sanity Server Client Configuration
+ * Sanity Client Configuration (server-only)
  *
- * Server-only client with authentication for previews and mutations.
- * This file uses process.env which only works on the server.
+ * This file is server-only (.server.ts) to prevent @sanity/client
+ * from being bundled into the client JavaScript (~251KB savings).
  */
-import { client } from './client'
+import { createClient } from '@sanity/client'
+
+// Public configuration
+export const projectId = 'oh7nanvc'
+export const dataset = 'production'
+export const apiVersion = '2024-01-01'
+
+export const client = createClient({
+  projectId,
+  dataset,
+  apiVersion,
+  useCdn: process.env.NODE_ENV === 'production',
+})
 
 // Client with token for authenticated requests (previews, mutations)
 export const getAuthenticatedClient = () => {

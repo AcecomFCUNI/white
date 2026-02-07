@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import * as d3 from "d3";
+import { select } from "d3-selection";
+import { geoOrthographic, geoPath } from "d3-geo";
+import { drag } from "d3-drag";
 import * as topojson from "topojson-client";
 import type { Topology, GeometryCollection } from "topojson-specification";
 import type { FeatureCollection, Geometry } from "geojson";
@@ -104,16 +106,15 @@ export function Globe({
   useEffect(() => {
     if (!worldData || !svgRef.current) return;
 
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
     svg.selectAll("*").remove();
 
-    const projection = d3
-      .geoOrthographic()
+    const projection = geoOrthographic()
       .scale(Math.min(width, height) / 2.2)
       .translate([width / 2, height / 2])
       .rotate([rotationRef.current.x, rotationRef.current.y]);
 
-    const path = d3.geoPath().projection(projection);
+    const path = geoPath().projection(projection);
 
     const countries = topojson.feature(
       worldData,
@@ -322,8 +323,7 @@ export function Globe({
     }
 
     // Drag interaction
-    const drag = d3
-      .drag<SVGSVGElement, unknown>()
+    const dragBehavior = drag<SVGSVGElement, unknown>()
       .on("start", () => {
         isDraggingRef.current = true;
       })
@@ -342,7 +342,7 @@ export function Globe({
         isDraggingRef.current = false;
       });
 
-    svg.call(drag);
+    svg.call(dragBehavior);
 
     return () => {
       if (animationId) cancelAnimationFrame(animationId);

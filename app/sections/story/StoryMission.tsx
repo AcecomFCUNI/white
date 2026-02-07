@@ -121,34 +121,17 @@ export function StoryMission () {
 
         {/* CubeSat visualization */}
         <div className="relative mb-20 flex justify-center">
-          <m.div
-            className="relative h-48 w-48 md:h-64 md:w-64"
+          <m.img
+            src="/assets/img/logo.png"
+            alt="Chasqui II"
+            className="h-48 w-48 object-contain md:h-64 md:w-64"
             style={{
               rotateY: cubeRotate,
               scale: cubeScale,
-              perspective: 1000
+              perspective: 1000,
+              filter: 'drop-shadow(0 0 40px rgba(219, 1, 58, 0.3))'
             }}
-          >
-            {/* Cube representation */}
-            <div
-              className="absolute inset-0 rounded-lg border-2 border-brand/50 bg-gradient-to-br from-gray-800 to-gray-900"
-              style={{
-                boxShadow:
-                  '0 0 60px rgba(219, 1, 58, 0.3), inset 0 0 30px rgba(219, 1, 58, 0.1)'
-              }}
-            >
-              {/* Solar panel effect */}
-              <div className="absolute -left-8 top-1/2 h-32 w-8 -translate-y-1/2 rounded bg-gradient-to-r from-blue-900 to-blue-700 opacity-80" />
-              <div className="absolute -right-8 top-1/2 h-32 w-8 -translate-y-1/2 rounded bg-gradient-to-l from-blue-900 to-blue-700 opacity-80" />
-
-              {/* Center logo */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="font-montserrat text-xl font-bold text-white/80">
-                  1U
-                </span>
-              </div>
-            </div>
-          </m.div>
+          />
         </div>
 
         {/* Subsystems grid */}
