@@ -27,7 +27,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   const products = await client.fetch<HomeProduct[]>(HOME_PRODUCTS_QUERY)
 
-  return json({ lang, products })
+  return json({ lang, products }, {
+    headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' },
+  })
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

@@ -31,7 +31,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   const news = await client.fetch<SanityNews[]>(NEWS_LIST_QUERY)
 
-  return json({ news, lang })
+  return json({ news, lang }, {
+    headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' },
+  })
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

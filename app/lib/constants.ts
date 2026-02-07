@@ -120,6 +120,20 @@ export const ANIMATION = {
   },
 } as const
 
+/**
+ * NebulaOrb Presets
+ *
+ * Reusable configurations for the NebulaOrb effect component.
+ * Position must be set per-usage since it depends on layout context.
+ */
+export const NEBULA_PRESETS = {
+  brandSubtle: { color: 'rgba(219, 1, 58, 0.15)', size: 500, blur: 100 },
+  brandFaint: { color: 'rgba(219, 1, 58, 0.08)', size: 500, blur: 100 },
+  blueSubtle: { color: 'rgba(59, 130, 246, 0.15)', size: 600, blur: 120 },
+  purpleSubtle: { color: 'rgba(139, 92, 246, 0.1)', size: 600, blur: 120 },
+  purpleMedium: { color: 'rgba(139, 92, 246, 0.2)', size: 500, blur: 100 },
+} as const
+
 // Breakpoints (matches Tailwind defaults)
 export const BREAKPOINTS = {
   sm: 640,

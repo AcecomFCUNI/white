@@ -5,7 +5,7 @@
  * Organizado con metodología Atomic Design.
  *
  * Estructura:
- * - Atoms: Badge, Button, Heading, IconButton, Input, Textarea, Select, Spinner, Skeleton
+ * - Atoms: Badge, Button, Heading, IconButton, Input, Textarea, Select, Spinner, Skeleton, Image
  * - Molecules: Card, Modal, Tooltip, Toast, Breadcrumb, Pagination, EmptyState, SectionHeader, ProductCard, NewsCard
  * - Organisms: Header, Footer
  */
@@ -24,6 +24,7 @@ import {
   Select,
   Spinner,
   Skeleton,
+  Image,
 } from '~/components/ui/atoms'
 
 // Molecules
@@ -94,7 +95,7 @@ export default function DesignSystemPage() {
 
           {/* Stats */}
           <div className="mb-16 grid gap-4 sm:grid-cols-4">
-            <StatCard number="9" label="Atoms" color="brand" />
+            <StatCard number="10" label="Atoms" color="brand" />
             <StatCard number="10" label="Molecules" color="blue" />
             <StatCard number="2" label="Organisms" color="green" />
             <StatCard number="2" label="Hooks" color="purple" />
@@ -124,6 +125,7 @@ export default function DesignSystemPage() {
               <SelectSection />
               <SpinnerSection />
               <SkeletonSection />
+              <ImageSection />
             </div>
           </div>
 
@@ -410,6 +412,11 @@ function TableOfContents() {
                 Skeleton
               </a>
             </li>
+            <li>
+              <a href="#image" className="hover:text-white">
+                Image
+              </a>
+            </li>
           </ul>
         </div>
         <div>
@@ -518,7 +525,7 @@ function ArchitectureSection() {
             </div>
             <h3 className="font-semibold text-white">Atoms</h3>
             <p className="mt-1 text-xs text-gray-400">
-              Button, Input, Badge, Heading, Spinner, Skeleton
+              Button, Input, Badge, Heading, Spinner, Skeleton, Image
             </p>
           </div>
           <div className="text-center">
@@ -1090,6 +1097,70 @@ function SkeletonSection() {
       <CodeBlock>{`<Skeleton variant="rectangular" className="h-32 w-full" />
 <Skeleton variant="circular" className="h-16 w-16" />
 <Skeleton variant="text" className="h-4 w-full" />`}</CodeBlock>
+    </SectionWrapper>
+  )
+}
+
+function ImageSection() {
+  return (
+    <SectionWrapper
+      id="image"
+      title="Image"
+      description="Imagen con fallback SVG, Sanity CDN transforms y lazy loading."
+    >
+      <Card variant="solid" hover={false}>
+        <div className="grid gap-6 md:grid-cols-3">
+          <div>
+            <span className="mb-2 block font-mono text-xs text-gray-500">con src</span>
+            <div className="aspect-square overflow-hidden rounded-lg">
+              <Image
+                src="/assets/img/logo.png"
+                alt="Logo Chasqui II"
+                className="h-full w-full object-contain"
+              />
+            </div>
+          </div>
+          <div>
+            <span className="mb-2 block font-mono text-xs text-gray-500">sin src (fallback)</span>
+            <div className="aspect-square overflow-hidden rounded-lg">
+              <Image
+                alt="Sin imagen"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+          <div>
+            <span className="mb-2 block font-mono text-xs text-gray-500">fallbackText custom</span>
+            <div className="aspect-square overflow-hidden rounded-lg">
+              <Image
+                alt="Foto de equipo"
+                fallbackText="Foto"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </Card>
+      <PropsTable
+        props={[
+          { name: 'src', type: 'string', description: 'URL de la imagen (auto-detecta Sanity CDN)' },
+          { name: 'alt', type: 'string', description: 'Texto alternativo (requerido)' },
+          { name: 'width', type: 'number', description: 'Ancho para Sanity CDN transform (?w=)' },
+          { name: 'quality', type: 'number', default: '80', description: 'Calidad para Sanity CDN (?q=)' },
+          { name: 'fallbackText', type: 'string', default: "'Image not available'", description: 'Texto del placeholder SVG' },
+          { name: 'loading', type: "'lazy' | 'eager'", default: "'lazy'", description: 'Estrategia de carga' },
+          { name: 'className', type: 'string', description: 'Clases CSS adicionales' },
+        ]}
+      />
+      <CodeBlock>{`<Image
+  src="https://cdn.sanity.io/images/.../image.jpg"
+  alt="Producto"
+  width={400}
+  quality={80}
+/>
+
+{/* Sin src - muestra fallback SVG */}
+<Image alt="Sin imagen" fallbackText="Foto" />`}</CodeBlock>
     </SectionWrapper>
   )
 }

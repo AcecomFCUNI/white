@@ -23,7 +23,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   const products = await client.fetch<SanityProduct[]>(PRODUCTS_LIST_QUERY)
 
-  return json({ products, lang })
+  return json({ products, lang }, {
+    headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' },
+  })
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

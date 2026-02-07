@@ -1,5 +1,6 @@
 import { Link } from '@remix-run/react'
 import { cn } from '~/lib/utils'
+import { Image } from '../atoms/Image'
 
 interface NewsCardProps {
   title: string
@@ -48,8 +49,6 @@ export function NewsCard({
   className,
   featured = false,
 }: NewsCardProps) {
-  const placeholderImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225'%3E%3Crect fill='%231f2937' width='400' height='225'/%3E%3Ctext fill='%236b7280' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='sans-serif' font-size='14'%3EImage not available%3C/text%3E%3C/svg%3E"
-
   const badgeColorClass = category?.color ? categoryColors[category.color] : categoryColors.purple
 
   if (featured) {
@@ -64,13 +63,10 @@ export function NewsCard({
         <div className="grid gap-6 md:grid-cols-2">
           {/* Image */}
           <div className="aspect-video overflow-hidden bg-gray-800 md:aspect-auto md:h-full">
-            <img
-              src={imageUrl || placeholderImage}
+            <Image
+              src={imageUrl}
               alt={title}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = placeholderImage
-              }}
             />
           </div>
 
@@ -120,13 +116,10 @@ export function NewsCard({
     >
       {/* Image with badge */}
       <div className="relative aspect-video overflow-hidden bg-gray-800">
-        <img
-          src={imageUrl || placeholderImage}
+        <Image
+          src={imageUrl}
           alt={title}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = placeholderImage
-          }}
         />
         {category && (
           <span

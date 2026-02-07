@@ -48,7 +48,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response('Not Found', { status: 404 })
   }
 
-  return json({ article, lang })
+  return json({ article, lang }, {
+    headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' },
+  })
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

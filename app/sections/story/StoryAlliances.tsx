@@ -112,6 +112,14 @@ function PartnerCard ({ partnerId, logo, index }: PartnerCardProps) {
   )
 }
 
+// Constellation line segments connecting the 4 partner cards horizontally
+// Each segment: [x1, x2] at y=60% — matches the 4-column grid positions (25%, 50%, 75%)
+const CONSTELLATION_SEGMENTS = [
+  { x1: '25%', x2: '50%' },
+  { x1: '50%', x2: '75%' },
+] as const
+const CONSTELLATION_Y = '60%'
+
 function ConstellationLines () {
   return (
     <svg
@@ -125,23 +133,17 @@ function ConstellationLines () {
           <stop offset="100%" stopColor="#db013a" stopOpacity="0" />
         </linearGradient>
       </defs>
-      {/* Connecting lines - simplified */}
-      <line
-        x1="25%"
-        y1="60%"
-        x2="50%"
-        y2="60%"
-        stroke="url(#lineGradient)"
-        strokeWidth="1"
-      />
-      <line
-        x1="50%"
-        y1="60%"
-        x2="75%"
-        y2="60%"
-        stroke="url(#lineGradient)"
-        strokeWidth="1"
-      />
+      {CONSTELLATION_SEGMENTS.map((seg) => (
+        <line
+          key={seg.x1}
+          x1={seg.x1}
+          y1={CONSTELLATION_Y}
+          x2={seg.x2}
+          y2={CONSTELLATION_Y}
+          stroke="url(#lineGradient)"
+          strokeWidth="1"
+        />
+      ))}
     </svg>
   )
 }

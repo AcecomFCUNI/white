@@ -1,4 +1,5 @@
 import { cn } from '~/lib/utils'
+import { Image } from '../atoms/Image'
 
 interface TeamMemberCardProps {
   name: string
@@ -29,8 +30,6 @@ export function TeamMemberCard({
   linkedin,
   className,
 }: TeamMemberCardProps) {
-  const placeholderPhoto = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%231f2937' width='200' height='200' rx='100'/%3E%3Ctext fill='%236b7280' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='sans-serif' font-size='14'%3EFoto%3C/text%3E%3C/svg%3E"
-
   return (
     <div
       className={cn(
@@ -40,13 +39,11 @@ export function TeamMemberCard({
     >
       {/* Photo */}
       <div className="mb-4 h-24 w-24 overflow-hidden rounded-full border-2 border-white/10 transition-colors group-hover:border-brand/50">
-        <img
-          src={photoUrl || placeholderPhoto}
+        <Image
+          src={photoUrl}
           alt={name}
+          fallbackText="Foto"
           className="h-full w-full object-cover"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = placeholderPhoto
-          }}
         />
       </div>
 

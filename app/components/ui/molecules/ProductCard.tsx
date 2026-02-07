@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { cn } from '~/lib/utils'
 import { LinkButton } from '../atoms/Button'
+import { Image } from '../atoms/Image'
 
 interface ProductCardProps {
   name: string
@@ -39,8 +40,6 @@ export function ProductCard({
   outOfStockLabel = 'Agotado',
   className,
 }: ProductCardProps) {
-  const placeholderImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Crect fill='%231f2937' width='300' height='300'/%3E%3Ctext fill='%236b7280' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='sans-serif' font-size='14'%3EImage not available%3C/text%3E%3C/svg%3E"
-
   // Combine main image with gallery
   const allImages = [imageUrl, ...gallery].filter(Boolean) as string[]
   const hasMultipleImages = allImages.length > 1
@@ -70,13 +69,10 @@ export function ProductCard({
     >
       {/* Image Carousel */}
       <div className="relative aspect-square overflow-hidden bg-gray-800">
-        <img
-          src={allImages[currentIndex] || placeholderImage}
+        <Image
+          src={allImages[currentIndex]}
           alt={`${name} - ${currentIndex + 1}`}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = placeholderImage
-          }}
         />
 
         {/* Navigation arrows - only show if multiple images */}

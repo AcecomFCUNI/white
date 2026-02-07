@@ -6,3 +6,4 @@ node_modules
 .sanity/
 test-results/
 playwright-report/
+.unlighthouse/
