@@ -3,6 +3,8 @@
  * Maps routes between languages with native slugs
  */
 
+import { redirect } from '@remix-run/node'
+
 export const supportedLanguages = ['es', 'en'] as const
 export type Language = typeof supportedLanguages[number]
 
@@ -56,6 +58,14 @@ export function getAlternateLanguagePath(currentPath: string, targetLang: Langua
   }
 
   return getLocalizedPath(routeInfo.routeKey, targetLang)
+}
+
+// Validate lang param, redirect to /es if invalid
+export function validateLang(lang: string | undefined): Language {
+  if (lang && supportedLanguages.includes(lang as Language)) {
+    return lang as Language
+  }
+  throw redirect('/es')
 }
 
 // Navigation items with route keys (for Header)

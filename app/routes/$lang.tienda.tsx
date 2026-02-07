@@ -14,8 +14,7 @@ import { FadeInView } from '~/components/animations'
 import { StarField } from '~/components/effects/StarField'
 import { NebulaOrb } from '~/components/effects/Nebula'
 import { ProductCard } from '~/components/ui/molecules'
-import { supportedLanguages, type Language } from '~/lib/i18n-routes'
-import { redirect } from '@remix-run/node'
+import { validateLang } from '~/lib/i18n-routes'
 
 // Types for Sanity product
 interface SanityProduct {
@@ -41,14 +40,8 @@ interface SanityProduct {
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const lang = params.lang as Language
+  const lang = validateLang(params.lang)
 
-  // Validate language
-  if (!supportedLanguages.includes(lang)) {
-    throw redirect('/es/tienda')
-  }
-
-  // Fetch products from Sanity
   const products = await client.fetch<SanityProduct[]>(PRODUCTS_LIST_QUERY)
 
   return json({ products, lang })

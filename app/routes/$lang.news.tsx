@@ -4,17 +4,10 @@
  */
 
 import { redirect, type LoaderFunctionArgs } from '@remix-run/node'
-import { supportedLanguages, type Language } from '~/lib/i18n-routes'
+import { validateLang } from '~/lib/i18n-routes'
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const lang = params.lang as Language
-
-  // Validate language
-  if (!supportedLanguages.includes(lang)) {
-    throw redirect('/es/noticias')
-  }
-
-  // Redirect to the canonical noticias route
+  const lang = validateLang(params.lang)
   throw redirect(`/${lang}/noticias`, 301)
 }
 

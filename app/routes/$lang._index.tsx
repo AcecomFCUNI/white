@@ -3,9 +3,8 @@
  * Language-prefixed home route: /es/ or /en/
  */
 
-import { LoaderFunctionArgs, redirect, json } from '@remix-run/node'
-import type { MetaFunction } from '@remix-run/node'
-import { useLoaderData, useRouteError, isRouteErrorResponse } from '@remix-run/react'
+import { json, type LoaderFunctionArgs, type MetaFunction } from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
 import { Header } from '~/sections/shared'
 import {
@@ -18,18 +17,25 @@ import {
   StoryContact
 } from '~/sections/story'
 import { ScrollProgress } from '~/components/animations'
-import { supportedLanguages, type Language } from '~/lib/i18n-routes'
-import { ErrorPage } from '~/pages/ErrorPage'
+import { validateLang } from '~/lib/i18n-routes'
+import { RouteErrorBoundary } from '~/components/shared'
+import { client, getLocalizedValue } from '~/sanity/lib'
+import { HOME_PRODUCTS_QUERY } from '~/sanity/lib/queries'
+
+interface HomeProduct {
+  _id: string
+  name: { es: string; en: string }
+  price: number
+  image?: { asset: { _id: string; url: string } }
+  gallery?: Array<{ asset: { _id: string; url: string } }>
+}
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const lang = params.lang as Language
+  const lang = validateLang(params.lang)
 
-  // Validate language
-  if (!supportedLanguages.includes(lang)) {
-    throw redirect('/es')
-  }
+  const products = await client.fetch<HomeProduct[]>(HOME_PRODUCTS_QUERY)
 
-  return json({ lang })
+  return json({ lang, products })
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -67,13 +73,21 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 }
 
 export default function LangIndex() {
-  const { lang } = useLoaderData<typeof loader>()
+  const { lang, products } = useLoaderData<typeof loader>()
   const { i18n } = useTranslation()
 
   // Sync i18n with URL language
   if (i18n.language !== lang) {
     i18n.changeLanguage(lang)
   }
+
+  // Map Sanity products for StoryCTA (preview without buy button)
+  const merchProducts = products.map((p) => ({
+    name: getLocalizedValue(p.name, lang) || '',
+    price: p.price,
+    imageUrl: p.image?.asset?.url,
+    gallery: p.gallery?.map((img) => img.asset?.url).filter(Boolean) as string[],
+  }))
 
   return (
     <>
@@ -101,7 +115,7 @@ export default function LangIndex() {
         <StoryAlliances />
 
         {/* Acto 6: Únete/Apóyanos - CTA */}
-        <StoryCTA />
+        <StoryCTA products={merchProducts} lang={lang} />
 
         {/* Acto 7: Contacto + Footer */}
         <StoryContact />
@@ -110,19 +124,4 @@ export default function LangIndex() {
   )
 }
 
-/**
- * Error Boundary for route errors
- * Catches errors in loaders, actions, and rendering
- */
-export function ErrorBoundary() {
-  const error = useRouteError()
-
-  if (isRouteErrorResponse(error)) {
-    return <ErrorPage status={error.status} />
-  }
-
-  // Log unexpected errors
-  console.error('Unexpected error:', error)
-
-  return <ErrorPage status={500} />
-}
+export { RouteErrorBoundary as ErrorBoundary }

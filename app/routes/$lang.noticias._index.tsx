@@ -7,22 +7,22 @@ import { json, type LoaderFunctionArgs, type MetaFunction } from '@remix-run/nod
 import { useLoaderData } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
 import { client, getLocalizedValue } from '~/sanity/lib'
-import { NEWS_LIST_QUERY, NEWS_CATEGORIES_QUERY } from '~/sanity/lib/queries'
+import { NEWS_LIST_QUERY } from '~/sanity/lib/queries'
 import { Header } from '~/sections/shared'
 import { StoryContact } from '~/sections/story'
 import { FadeInView } from '~/components/animations'
 import { StarField } from '~/components/effects/StarField'
 import { NebulaOrb } from '~/components/effects/Nebula'
 import { NewsCard } from '~/components/ui/molecules'
-import { supportedLanguages, type Language } from '~/lib/i18n-routes'
-import { redirect } from '@remix-run/node'
+import { validateLang } from '~/lib/i18n-routes'
 
-// Types for Sanity news
-interface SanityNewsCategory {
-  _id: string
-  title: { es?: string; en?: string }
-  slug: { current: string }
-  color: 'purple' | 'blue' | 'green' | 'yellow' | 'red'
+// Category config: labels and badge colors
+const categoryConfig: Record<string, { es: string; en: string; color: 'purple' | 'blue' | 'green' | 'yellow' | 'red' }> = {
+  launch: { es: 'Lanzamiento', en: 'Launch', color: 'red' },
+  event: { es: 'Evento', en: 'Event', color: 'blue' },
+  achievement: { es: 'Logro', en: 'Achievement', color: 'green' },
+  partnership: { es: 'Alianza', en: 'Partnership', color: 'purple' },
+  technical: { es: 'Técnico', en: 'Technical', color: 'yellow' },
 }
 
 interface SanityNews {
@@ -32,30 +32,21 @@ interface SanityNews {
   excerpt: { es?: string; en?: string }
   publishedAt: string
   featured: boolean
+  category?: string
   image?: {
     asset: {
       _id: string
       url: string
     }
   }
-  category?: SanityNewsCategory
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const lang = params.lang as Language
+  const lang = validateLang(params.lang)
 
-  // Validate language
-  if (!supportedLanguages.includes(lang)) {
-    throw redirect('/es/noticias')
-  }
+  const news = await client.fetch<SanityNews[]>(NEWS_LIST_QUERY)
 
-  // Fetch news and categories from Sanity
-  const [news, categories] = await Promise.all([
-    client.fetch<SanityNews[]>(NEWS_LIST_QUERY),
-    client.fetch<SanityNewsCategory[]>(NEWS_CATEGORIES_QUERY),
-  ])
-
-  return json({ news, categories, lang })
+  return json({ news, lang })
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -146,10 +137,10 @@ export default function NewsRoute() {
                   imageUrl={featuredNews.image?.asset?.url}
                   href={`/${lang}/noticias/${featuredNews.slug.current}`}
                   category={
-                    featuredNews.category
+                    featuredNews.category && categoryConfig[featuredNews.category]
                       ? {
-                          name: getLocalizedValue(featuredNews.category.title, lang) || '',
-                          color: featuredNews.category.color,
+                          name: categoryConfig[featuredNews.category][lang as 'es' | 'en'],
+                          color: categoryConfig[featuredNews.category].color,
                         }
                       : undefined
                   }
@@ -194,10 +185,10 @@ export default function NewsRoute() {
                       imageUrl={article.image?.asset?.url}
                       href={`/${lang}/noticias/${article.slug.current}`}
                       category={
-                        article.category
+                        article.category && categoryConfig[article.category]
                           ? {
-                              name: getLocalizedValue(article.category.title, lang) || '',
-                              color: article.category.color,
+                              name: categoryConfig[article.category][lang as 'es' | 'en'],
+                              color: categoryConfig[article.category].color,
                             }
                           : undefined
                       }
