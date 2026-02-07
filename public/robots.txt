@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chasqui2.pe/sitemap.xml

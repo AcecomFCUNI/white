@@ -11,31 +11,56 @@ import { createReadableStreamFromReadable } from '@remix-run/node'
 import { RemixServer } from '@remix-run/react'
 import { isbot } from 'isbot'
 import { renderToPipeableStream } from 'react-dom/server'
+import { createInstance } from 'i18next'
+import { I18nextProvider, initReactI18next } from 'react-i18next'
+import i18next from './i18n.server'
+import i18nConfig from './i18n'
+import { resources } from './lib/translations'
 
 const ABORT_DELAY = 5_000
 
-export default function handleRequest (
+export default async function handleRequest (
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-  // This is ignored so we can keep it in the template for visibility.  Feel
-  // free to delete this parameter in your app if you're not using it!
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   loadContext: AppLoadContext
 ) {
+  const instance = createInstance()
+  const ns = i18next.getRouteNamespaces(remixContext)
+
+  // Extract language from URL path (/$lang/...) to stay in sync with
+  // the <html lang> attribute set by root.tsx Layout.
+  // Falls back to remix-i18next detection (cookie / Accept-Language).
+  const url = new URL(request.url)
+  const pathLang = url.pathname.split('/')[1]
+  const lng = ['es', 'en'].includes(pathLang)
+    ? pathLang
+    : await i18next.getLocale(request)
+
+  await instance
+    .use(initReactI18next)
+    .init({
+      ...i18nConfig,
+      lng,
+      ns,
+      resources, // Use bundled translations
+    })
+
   return isbot(request.headers.get('user-agent') || '')
     ? handleBotRequest(
       request,
       responseStatusCode,
       responseHeaders,
-      remixContext
+      remixContext,
+      instance
     )
     : handleBrowserRequest(
       request,
       responseStatusCode,
       responseHeaders,
-      remixContext
+      remixContext,
+      instance
     )
 }
 
@@ -43,16 +68,19 @@ function handleBotRequest (
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext
+  remixContext: EntryContext,
+  i18nInstance: ReturnType<typeof createInstance>
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false
     const { pipe, abort } = renderToPipeableStream(
-      <RemixServer
-        context={remixContext}
-        url={request.url}
-        abortDelay={ABORT_DELAY}
-      />,
+      <I18nextProvider i18n={i18nInstance}>
+        <RemixServer
+          context={remixContext}
+          url={request.url}
+          abortDelay={ABORT_DELAY}
+        />
+      </I18nextProvider>,
       {
         onAllReady () {
           shellRendered = true
@@ -75,9 +103,6 @@ function handleBotRequest (
         },
         onError (error: unknown) {
           responseStatusCode = 500
-          // Log streaming rendering errors from inside the shell.  Don't log
-          // errors encountered during initial shell rendering since they'll
-          // reject and get logged in handleDocumentRequest.
           if (shellRendered) {
             console.error(error)
           }
@@ -93,16 +118,19 @@ function handleBrowserRequest (
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext
+  remixContext: EntryContext,
+  i18nInstance: ReturnType<typeof createInstance>
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false
     const { pipe, abort } = renderToPipeableStream(
-      <RemixServer
-        context={remixContext}
-        url={request.url}
-        abortDelay={ABORT_DELAY}
-      />,
+      <I18nextProvider i18n={i18nInstance}>
+        <RemixServer
+          context={remixContext}
+          url={request.url}
+          abortDelay={ABORT_DELAY}
+        />
+      </I18nextProvider>,
       {
         onShellReady () {
           shellRendered = true
@@ -125,9 +153,6 @@ function handleBrowserRequest (
         },
         onError (error: unknown) {
           responseStatusCode = 500
-          // Log streaming rendering errors from inside the shell.  Don't log
-          // errors encountered during initial shell rendering since they'll
-          // reject and get logged in handleDocumentRequest.
           if (shellRendered) {
             console.error(error)
           }

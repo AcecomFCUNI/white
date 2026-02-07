@@ -1,0 +1,7 @@
+export { StoryHero } from './StoryHero'
+export { StoryDream } from './StoryDream'
+export { StoryTeam } from './StoryTeam'
+export { StoryMission } from './StoryMission'
+export { StoryAlliances } from './StoryAlliances'
+export { StoryCTA } from './StoryCTA'
+export { StoryContact } from './StoryContact'

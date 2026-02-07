@@ -1,0 +1,357 @@
+{
+  "common": {
+    "comingSoon": "Coming soon",
+    "skipToContent": "Skip to main content"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "project": "Project",
+    "news": "News",
+    "shop": "Shop",
+    "support": "Support Us",
+    "language": "Language"
+  },
+  "hero": {
+    "subtitle": "A student mission to space",
+    "tagline": "The first Peruvian CubeSat designed and built by students from the National University of Engineering",
+    "scrollCta": "Discover our story"
+  },
+  "story": {
+    "badge": "Our Story",
+    "title1": "From the classrooms of",
+    "title2": "we look towards the stars",
+    "p1": "It all started with a shared dream: to prove that Peruvian students can conquer space. Not as spectators, but as protagonists of our own aerospace history.",
+    "p2": "In 2018, a group of students from the National University of Engineering decided it was time to act. Thus, the Chasqui II project was born, named in honor of the messengers of the Inca empire who traveled thousands of kilometers carrying vital information.",
+    "p3": "Today, our CubeSat will carry that innovative spirit beyond our atmosphere, demonstrating that limits only exist to be overcome.",
+    "stats": {
+      "year": "Year started",
+      "students": "Students involved",
+      "subsystems": "Subsystems",
+      "size": "CubeSat size"
+    }
+  },
+  "team": {
+    "badge": "Our Team",
+    "title": "Together we build the",
+    "titleHighlight": "future",
+    "design": {
+      "title": "Design & Marketing",
+      "description": "We create the visual identity of the project and communicate our mission to the world.",
+      "skills": ["Graphic Design", "Social Media", "Branding", "Photography"]
+    },
+    "management": {
+      "title": "Management & Logistics",
+      "description": "We coordinate resources, timelines, and teams so every piece fits perfectly.",
+      "skills": ["Project Management", "Finance", "Partnerships", "Events"]
+    },
+    "stem": {
+      "title": "STEM",
+      "description": "The technical heart. Engineers and scientists who design and build the CubeSat.",
+      "skills": ["Electronics", "Software", "Mechanics", "Telecom"]
+    }
+  },
+  "mission": {
+    "badge": "Technology",
+    "title": "10 Subsystems,",
+    "titleHighlight": "one mission",
+    "description": "Each subsystem is vital for our mission's success. From power generation to Earth communications, everything works in perfect harmony.",
+    "subsystems": {
+      "payload": { "name": "Payload", "description": "Camera and sensors for Earth imaging" },
+      "computer": { "name": "On-Board Computer", "description": "Satellite brain, processes data and commands" },
+      "comms": { "name": "Communications", "description": "Link with ground station" },
+      "thermal": { "name": "Thermal Control", "description": "Maintains optimal operating temperatures" },
+      "attitude": { "name": "Attitude Control", "description": "Satellite orientation and stabilization" },
+      "ground": { "name": "Ground Station", "description": "Control and monitoring center on Earth" },
+      "structure": { "name": "Mechanical Structure", "description": "Chassis that protects all components" },
+      "manufacturing": { "name": "Manufacturing", "description": "Component fabrication and assembly" },
+      "power": { "name": "Power", "description": "Solar panels and energy distribution" },
+      "propulsion": { "name": "Propulsion", "description": "Orbital maneuvering system" }
+    }
+  },
+  "alliances": {
+    "badge": "Strategic Alliances",
+    "title": "We're not alone in this",
+    "titleHighlight": "mission",
+    "description": "We have the support of institutions and organizations that believe in the potential of Peruvian youth to conquer space.",
+    "partners": {
+      "ctic": { "name": "CTIC UNI", "description": "Research laboratory" },
+      "ieee": { "name": "IEEE AESS UNI", "description": "Aerospace Systems Chapter" },
+      "acecom": { "name": "ACECOM", "description": "Computing Association" },
+      "graviit": { "name": "GRAVIIT SPACE", "description": "Strategic aerospace partner" }
+    },
+    "cta": "Does your organization want to be part of this mission?",
+    "button": "Contact Us"
+  },
+  "cta": {
+    "badge": "Be part of the change",
+    "title": "Join our community",
+    "description": "Be part of the group of people passionate about space. Share ideas, receive updates and participate in our events.",
+    "whatsappButton": "Join the WhatsApp group",
+    "merchTitle": "Support us with our",
+    "merchHighlight": "merchandise",
+    "exploreShop": "Explore Shop",
+    "donationTitle": "Support with a",
+    "donationHighlight": "donation",
+    "donationDescription": "Your contribution helps us acquire components, finance tests and get closer to space every day.",
+    "scanQr": "Scan the QR to donate",
+    "bankTransfer": "We also accept bank transfers.",
+    "contactUs": "Contact us",
+    "moreInfo": "for more information."
+  },
+  "contact": {
+    "badge": "Contact",
+    "title": "Have questions?",
+    "titleHighlight": "Write to us",
+    "address": "Address",
+    "email": "Email",
+    "phone": "Phone",
+    "fields": {
+      "name": "Name",
+      "email": "Email address",
+      "subject": "Subject",
+      "message": "Message"
+    },
+    "placeholders": {
+      "name": "Your full name",
+      "email": "you@email.com",
+      "subject": "Select a subject",
+      "message": "Write your message here..."
+    },
+    "subjects": {
+      "general": "General inquiry",
+      "collaboration": "Collaboration",
+      "sponsorship": "Sponsorship",
+      "press": "Press",
+      "other": "Other"
+    },
+    "errors": {
+      "nameRequired": "Name is required",
+      "nameTooShort": "Name must be at least 2 characters",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Enter a valid email address",
+      "subjectRequired": "Please select a subject",
+      "messageRequired": "Message is required",
+      "messageTooShort": "Message must be at least 10 characters"
+    },
+    "submit": "Send message",
+    "sending": "Sending...",
+    "success": {
+      "title": "Message sent!",
+      "message": "Thank you for contacting us. We'll respond soon.",
+      "sendAnother": "Send another message"
+    },
+    "error": {
+      "title": "Error sending",
+      "message": "There was a problem sending your message. Please try again.",
+      "tryAgain": "Try again"
+    }
+  },
+  "footer": {
+    "tagline": "A student mission to space",
+    "copyright": "© {{year}} Chasqui II Project - National University of Engineering. All rights reserved."
+  },
+  "about": {
+    "badge": "About Us",
+    "title": "Meet",
+    "subtitle": "The student team that is making history in Peruvian aerospace engineering.",
+    "history": {
+      "title": "Our History",
+      "p1": "The Chasqui II project was born in 2018 at the National University of Engineering, with the goal of designing, building, and operating the first Peruvian CubeSat developed entirely by students.",
+      "p2": "Our name honors the legendary messengers of the Inca Empire, the Chasquis, who traveled great distances carrying vital information. Today, we carry that legacy to space.",
+      "p3": "We are a multidisciplinary team of more than 60 students from different faculties, united by the passion of taking Peru to space."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "p1": "Develop aerospace capabilities in Peru through practical training of students in the design and construction of satellite systems.",
+      "p2": "Inspire new generations of Peruvians to pursue careers in science, technology, engineering, and mathematics."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "text": "Become a reference for student aerospace development in Latin America, demonstrating that with dedication and teamwork, limits only exist to be overcome."
+    },
+    "team": {
+      "title": "Leadership",
+      "subtitle": "The leaders guiding our mission to space",
+      "director": "General Director",
+      "coordinator": "General Coordinator"
+    }
+  },
+  "project": {
+    "badge": "Technology",
+    "title": "The",
+    "subtitle": "Discover the technology behind our space mission: a nanosatellite with 10 integrated subsystems working in perfect harmony.",
+    "specsTitle": "General Specifications",
+    "specs": {
+      "type": "Type",
+      "typeValue": "CubeSat 1U",
+      "dimensions": "Dimensions",
+      "dimensionsValue": "10 x 10 x 10 cm",
+      "mass": "Mass",
+      "massValue": "< 1.33 kg",
+      "orbit": "Orbit",
+      "orbitValue": "LEO (~400 km)",
+      "lifespan": "Lifespan",
+      "lifespanValue": "1-2 years",
+      "power": "Power",
+      "powerValue": "2W average"
+    },
+    "subsystemsTitle": "Subsystems",
+    "subsystemsSubtitle": "Each component is essential for mission success",
+    "subsystems": {
+      "payload": {
+        "name": "Payload",
+        "description": "Earth surface image capture system using high-resolution camera and specialized sensors.",
+        "detail1": "5MP resolution camera",
+        "detail2": "Multispectral sensors",
+        "detail3": "16GB storage"
+      },
+      "computer": {
+        "name": "On-Board Computer (OBC)",
+        "description": "The brain of the satellite, responsible for processing data, executing commands, and coordinating all subsystems.",
+        "detail1": "ARM Cortex-M4 processor",
+        "detail2": "Real-time operating system",
+        "detail3": "Hardware redundancy"
+      },
+      "comms": {
+        "name": "Communications (COMMS)",
+        "description": "Bidirectional link system between the satellite and ground station for data transmission and telecommands.",
+        "detail1": "UHF/VHF band",
+        "detail2": "AX.25 protocol",
+        "detail3": "Deployable antenna"
+      },
+      "thermal": {
+        "name": "Thermal Control (TCS)",
+        "description": "Keeps all components within their operational temperature range using passive and active techniques.",
+        "detail1": "Passive radiators",
+        "detail2": "MLI (multilayer insulation)",
+        "detail3": "Temperature sensors"
+      },
+      "attitude": {
+        "name": "Attitude Determination and Control (ADCS)",
+        "description": "System that determines and controls the satellite's orientation in space to correctly point instruments.",
+        "detail1": "Magnetometers",
+        "detail2": "Gyroscopes",
+        "detail3": "Reaction wheels"
+      },
+      "ground": {
+        "name": "Ground Station (GS)",
+        "description": "Ground control and monitoring center that receives telemetry and sends commands to the satellite.",
+        "detail1": "High-gain Yagi antenna",
+        "detail2": "Tracking software",
+        "detail3": "Operations center"
+      },
+      "structure": {
+        "name": "Mechanical Structure",
+        "description": "Chassis that protects all internal components and complies with CubeSat standards for deployment.",
+        "detail1": "Aluminum 6061-T6",
+        "detail2": "CubeSat 1U standard",
+        "detail3": "Deployment rails"
+      },
+      "manufacturing": {
+        "name": "Space Manufacturing",
+        "description": "Manufacturing and assembly processes following aerospace quality standards.",
+        "detail1": "Class 100,000 clean room",
+        "detail2": "Vibration testing",
+        "detail3": "Quality inspection"
+      },
+      "power": {
+        "name": "Power (EPS)",
+        "description": "Electrical power generation, storage, and distribution system for all subsystems.",
+        "detail1": "Triple-junction solar panels",
+        "detail2": "Li-ion batteries",
+        "detail3": "Voltage regulators"
+      },
+      "propulsion": {
+        "name": "Propulsion",
+        "description": "Orbital maneuvering system for altitude adjustments and deorbiting at end of mission.",
+        "detail1": "Electric propulsion",
+        "detail2": "Attitude control",
+        "detail3": "Passive deorbiting"
+      }
+    }
+  },
+  "news": {
+    "badge": "Updates",
+    "titleHighlight": "News",
+    "title": "& Events",
+    "subtitle": "Stay up to date with the latest advances, events, and achievements of the Chasqui II project.",
+    "readMore": "Read more",
+    "moreNews": "More News",
+    "categories": {
+      "event": "Event",
+      "technical": "Technical",
+      "team": "Team",
+      "international": "International",
+      "research": "Research",
+      "infrastructure": "Infrastructure"
+    },
+    "featured": {
+      "title": "Chasqui II at the Latin American Technology Installation Festival",
+      "excerpt": "Our team actively participated in FLIT 2024, presenting project advances to the scientific and technological community in the region."
+    },
+    "items": {
+      "comms": {
+        "title": "Advances in the communications subsystem",
+        "excerpt": "The COMMS team successfully completed link tests with the ground station antenna."
+      },
+      "unitec": {
+        "title": "Chasqui II at UNITEC 2024",
+        "excerpt": "We presented our project at the UNITEC congress, receiving valuable feedback from international experts."
+      },
+      "newMembers": {
+        "title": "New members join the team",
+        "excerpt": "We welcome 15 new students who join the different areas of the project."
+      },
+      "apsco": {
+        "title": "Participation in APSCO",
+        "excerpt": "Chasqui II representatives attended the Asia-Pacific Space Cooperation Organization training program."
+      },
+      "iac": {
+        "title": "International Astronautical Congress (IAC)",
+        "excerpt": "Our paper was accepted and presented at the most important congress in the global space industry."
+      },
+      "workshop": {
+        "title": "New space soldering workshop",
+        "excerpt": "We inaugurated the specialized soldering workshop for CubeSat electronic components."
+      }
+    }
+  },
+  "shop": {
+    "badge": "Merchandise",
+    "titleHighlight": "Official",
+    "title": "Shop",
+    "subtitle": "Every purchase helps us fund the project. Take a piece of our space mission with you.",
+    "buyButton": "Buy",
+    "howToBuy": {
+      "title": "How to buy?",
+      "description": "Click \"Buy\" to contact us via WhatsApp. We'll coordinate delivery and payment directly with you. We accept cash, Yape, and Plin."
+    },
+    "products": {
+      "mug": {
+        "name": "Chasqui II Mug",
+        "description": "Ceramic mug with the official project logo"
+      },
+      "keychain": {
+        "name": "Chasqui II Keychain",
+        "description": "Acrylic keychain with space design"
+      },
+      "shirt": {
+        "name": "Official T-Shirt",
+        "description": "Cotton t-shirt with embroidered logo"
+      },
+      "stickers": {
+        "name": "Sticker Pack",
+        "description": "Set of 5 stickers with project designs"
+      },
+      "cap": {
+        "name": "Chasqui Cap",
+        "description": "Adjustable cap with embroidered logo"
+      },
+      "notebook": {
+        "name": "Notebook",
+        "description": "A5 hardcover notebook with space design"
+      }
+    }
+  }
+}

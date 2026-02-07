@@ -14,7 +14,7 @@ const NewItem: React.FC<NewItemProps> = ({ title, description, img, href }) => {
       <img src={`/assets/img/news/${img}.png`} alt={title} className="w-full h-auto rounded-2xl mb-3" />
       <h5 className="text-lg font-semibold mb-2">{title}</h5>
       <p className="mb-3 text-sm">{description}</p>
-      <a href={href} className="text-[#db013a] font-semibold hover:underline text-sm">
+      <a href={href} className="text-brand font-semibold hover:underline text-sm">
         Leer Más →
       </a>
     </div>
