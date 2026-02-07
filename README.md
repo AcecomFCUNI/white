@@ -17,6 +17,9 @@ Landing page del proyecto Chasqui II, el primer CubeSat peruano diseñado y cons
 | `pnpm run start` | Ejecutar servidor de produccion |
 | `pnpm run lint` | Ejecutar ESLint |
 | `pnpm run typecheck` | Verificar tipos TypeScript |
+| `pnpm run test` | Ejecutar unit tests (Vitest) |
+| `pnpm run test:watch` | Unit tests en modo watch |
+| `pnpm run test:e2e` | Ejecutar E2E tests (Playwright) |
 | `pnpm sanity` | CLI de Sanity Studio |
 | `pnpm sanity:dev` | Iniciar Sanity Studio local |
 | `pnpm sanity:deploy` | Desplegar Sanity Studio |
@@ -42,6 +45,8 @@ White/
 │   │   ├── effects/         # StarField, NebulaOrb
 │   │   └── ui/              # Design System (atoms, molecules, organisms)
 │   ├── lib/                 # Utilidades (i18n-routes, utils)
+│   ├── types/               # Tipos centralizados (interfaces Sanity)
+│   ├── __tests__/           # Unit tests (Vitest + Testing Library)
 │   ├── pages/               # Componentes de pagina
 │   ├── routes/              # Rutas de Remix (file-based routing)
 │   ├── sanity/lib/          # Cliente Sanity, queries GROQ

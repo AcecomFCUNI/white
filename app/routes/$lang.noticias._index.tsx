@@ -15,6 +15,7 @@ import { StarField } from '~/components/effects/StarField'
 import { NebulaOrb } from '~/components/effects/Nebula'
 import { NewsCard } from '~/components/ui/molecules'
 import { validateLang } from '~/lib/i18n-routes'
+import type { SanityNews } from '~/types'
 
 // Category config: labels and badge colors
 const categoryConfig: Record<string, { es: string; en: string; color: 'purple' | 'blue' | 'green' | 'yellow' | 'red' }> = {
@@ -23,22 +24,6 @@ const categoryConfig: Record<string, { es: string; en: string; color: 'purple' |
   achievement: { es: 'Logro', en: 'Achievement', color: 'green' },
   partnership: { es: 'Alianza', en: 'Partnership', color: 'purple' },
   technical: { es: 'Técnico', en: 'Technical', color: 'yellow' },
-}
-
-interface SanityNews {
-  _id: string
-  title: { es?: string; en?: string }
-  slug: { current: string }
-  excerpt: { es?: string; en?: string }
-  publishedAt: string
-  featured: boolean
-  category?: string
-  image?: {
-    asset: {
-      _id: string
-      url: string
-    }
-  }
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {

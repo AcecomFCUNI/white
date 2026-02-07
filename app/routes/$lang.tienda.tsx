@@ -15,29 +15,7 @@ import { StarField } from '~/components/effects/StarField'
 import { NebulaOrb } from '~/components/effects/Nebula'
 import { ProductCard } from '~/components/ui/molecules'
 import { validateLang } from '~/lib/i18n-routes'
-
-// Types for Sanity product
-interface SanityProduct {
-  _id: string
-  name: { es: string; en: string }
-  slug: { current: string }
-  description: { es: string; en: string }
-  price: number
-  inStock: boolean
-  featured: boolean
-  image?: {
-    asset: {
-      _id: string
-      url: string
-    }
-  }
-  gallery?: Array<{
-    asset: {
-      _id: string
-      url: string
-    }
-  }>
-}
+import type { SanityProduct } from '~/types'
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const lang = validateLang(params.lang)

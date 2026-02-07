@@ -17,6 +17,7 @@ import { Badge } from '~/components/ui/atoms'
 import { supportedLanguages, type Language } from '~/lib/i18n-routes'
 import { redirect } from '@remix-run/node'
 import { PortableText, type PortableTextComponents, type PortableTextBlock } from '@portabletext/react'
+import type { SanityNewsDetail } from '~/types'
 
 // Category config: labels and badge colors
 const categoryConfig: Record<string, { es: string; en: string; color: 'purple' | 'blue' | 'green' | 'yellow' | 'red' }> = {
@@ -25,22 +26,6 @@ const categoryConfig: Record<string, { es: string; en: string; color: 'purple' |
   achievement: { es: 'Logro', en: 'Achievement', color: 'green' },
   partnership: { es: 'Alianza', en: 'Partnership', color: 'purple' },
   technical: { es: 'Técnico', en: 'Technical', color: 'yellow' },
-}
-
-interface SanityNewsDetail {
-  _id: string
-  title: { es?: string; en?: string }
-  slug: { current: string }
-  excerpt: { es?: string; en?: string }
-  body: { es?: PortableTextBlock[]; en?: PortableTextBlock[] }
-  publishedAt: string
-  image?: {
-    asset: {
-      _id: string
-      url: string
-    }
-  }
-  category?: string
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {

@@ -10,6 +10,7 @@ import { client, getLocalizedValue } from '~/sanity/lib'
 import { TEAM_LEADERSHIP_QUERY, TEAM_MEMBERS_QUERY } from '~/sanity/lib/queries'
 import { AboutPage } from '~/pages/AboutPage'
 import { RouteErrorBoundary } from '~/components/shared'
+import type { SanityTeamLeader, SanityTeamMember } from '~/types'
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const lang = validateLang(params.lang)
@@ -44,14 +45,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export default function NosotrosRoute() {
   const { lang, leadership, members } = useLoaderData<typeof loader>()
 
-  const leadershipMembers = leadership.map((m: {
-    name: string
-    role: { es: string; en: string }
-    quote?: { es: string; en: string }
-    photo?: { asset: { _id: string; url: string } }
-    email?: string
-    linkedin?: string
-  }) => ({
+  const leadershipMembers = leadership.map((m: SanityTeamLeader) => ({
     name: m.name,
     role: getLocalizedValue(m.role, lang) || '',
     quote: getLocalizedValue(m.quote, lang),
@@ -60,13 +54,7 @@ export default function NosotrosRoute() {
     linkedin: m.linkedin,
   }))
 
-  const teamMembers = members.map((m: {
-    name: string
-    role: { es: string; en: string }
-    area: string
-    photo?: { asset: { _id: string; url: string } }
-    linkedin?: string
-  }) => ({
+  const teamMembers = members.map((m: SanityTeamMember) => ({
     name: m.name,
     role: getLocalizedValue(m.role, lang) || '',
     area: m.area,

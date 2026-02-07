@@ -6,12 +6,14 @@
 import { useRef, type ReactNode } from 'react'
 import { m, useScroll, useTransform, useSpring } from 'motion/react'
 
+type ScrollOffset = NonNullable<NonNullable<Parameters<typeof useScroll>[0]>['offset']>
+
 interface ParallaxLayerProps {
   children: ReactNode;
   speed?: number; // -1 to 1, negative = slower, positive = faster
   direction?: 'vertical' | 'horizontal';
   className?: string;
-  offset?: [string, string];
+  offset?: ScrollOffset;
 }
 
 export function ParallaxLayer ({
@@ -25,8 +27,7 @@ export function ParallaxLayer ({
 
   const { scrollYProgress } = useScroll({
     target: ref,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    offset: offset as any
+    offset
   })
 
   // Calculate movement range based on speed

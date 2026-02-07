@@ -5,8 +5,10 @@
 import { useScroll, useSpring, type MotionValue } from 'motion/react'
 import { useRef } from 'react'
 
+type ScrollOffset = NonNullable<NonNullable<Parameters<typeof useScroll>[0]>['offset']>
+
 interface ScrollProgressOptions {
-  offset?: [string, string];
+  offset?: ScrollOffset;
   smooth?: boolean;
   springConfig?: { stiffness: number; damping: number; mass: number };
 }
@@ -30,8 +32,7 @@ export function useScrollProgress (
 
   const { scrollYProgress } = useScroll({
     target: ref,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    offset: offset as any
+    offset
   })
 
   const smoothProgress = useSpring(scrollYProgress, springConfig)

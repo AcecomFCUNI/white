@@ -20,14 +20,7 @@ import { validateLang } from '~/lib/i18n-routes'
 import { RouteErrorBoundary } from '~/components/shared'
 import { client, getLocalizedValue } from '~/sanity/lib'
 import { HOME_PRODUCTS_QUERY } from '~/sanity/lib/queries'
-
-interface HomeProduct {
-  _id: string
-  name: { es: string; en: string }
-  price: number
-  image?: { asset: { _id: string; url: string } }
-  gallery?: Array<{ asset: { _id: string; url: string } }>
-}
+import type { HomeProduct } from '~/types'
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const lang = validateLang(params.lang)
