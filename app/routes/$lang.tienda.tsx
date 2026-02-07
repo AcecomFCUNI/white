@@ -68,12 +68,7 @@ const WHATSAPP_NUMBER = '519XXXXXXXX' // Replace with actual number
 
 export default function ShopRoute() {
   const { products, lang } = useLoaderData<typeof loader>()
-  const { t, i18n } = useTranslation()
-
-  // Sync i18n with URL language
-  if (i18n.language !== lang) {
-    i18n.changeLanguage(lang)
-  }
+  const { t } = useTranslation()
 
   function getWhatsAppLink(productName: string) {
     const message = lang === 'en'

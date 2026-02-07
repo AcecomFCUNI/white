@@ -5,7 +5,6 @@
 
 import { json, type LoaderFunctionArgs, type MetaFunction } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { useTranslation } from 'react-i18next'
 import { Header } from '~/sections/shared'
 import {
   StoryHero,
@@ -74,12 +73,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export default function LangIndex() {
   const { lang, products } = useLoaderData<typeof loader>()
-  const { i18n } = useTranslation()
-
-  // Sync i18n with URL language
-  if (i18n.language !== lang) {
-    i18n.changeLanguage(lang)
-  }
 
   // Map Sanity products for StoryCTA (preview without buy button)
   const merchProducts = products.map((p) => ({

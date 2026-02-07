@@ -4,8 +4,6 @@
  */
 
 import { json, type LoaderFunctionArgs, type MetaFunction } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
-import { useTranslation } from 'react-i18next'
 import { validateLang, routeMap } from '~/lib/i18n-routes'
 import { ProjectPage } from '~/pages/ProjectPage'
 import { RouteErrorBoundary } from '~/components/shared'
@@ -35,13 +33,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 }
 
 export default function ProyectoRoute() {
-  const { lang } = useLoaderData<typeof loader>()
-  const { i18n } = useTranslation()
-
-  if (i18n.language !== lang) {
-    i18n.changeLanguage(lang)
-  }
-
   return <ProjectPage />
 }
 

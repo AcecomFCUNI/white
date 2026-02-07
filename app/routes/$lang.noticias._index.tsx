@@ -68,12 +68,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export default function NewsRoute() {
   const { news, lang } = useLoaderData<typeof loader>()
-  const { t, i18n } = useTranslation()
-
-  // Sync i18n with URL language
-  if (i18n.language !== lang) {
-    i18n.changeLanguage(lang)
-  }
+  const { t } = useTranslation()
 
   // Format date
   function formatDate(dateString: string) {

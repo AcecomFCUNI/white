@@ -27,8 +27,16 @@ export default async function handleRequest (
   loadContext: AppLoadContext
 ) {
   const instance = createInstance()
-  const lng = await i18next.getLocale(request)
   const ns = i18next.getRouteNamespaces(remixContext)
+
+  // Extract language from URL path (/$lang/...) to stay in sync with
+  // the <html lang> attribute set by root.tsx Layout.
+  // Falls back to remix-i18next detection (cookie / Accept-Language).
+  const url = new URL(request.url)
+  const pathLang = url.pathname.split('/')[1]
+  const lng = ['es', 'en'].includes(pathLang)
+    ? pathLang
+    : await i18next.getLocale(request)
 
   await instance
     .use(initReactI18next)

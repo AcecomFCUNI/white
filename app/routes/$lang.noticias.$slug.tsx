@@ -144,12 +144,7 @@ const portableTextComponents: PortableTextComponents = {
 
 export default function NewsDetailRoute() {
   const { article, lang } = useLoaderData<typeof loader>()
-  const { t, i18n } = useTranslation()
-
-  // Sync i18n with URL language
-  if (i18n.language !== lang) {
-    i18n.changeLanguage(lang)
-  }
+  const { t } = useTranslation()
 
   // Format date
   function formatDate(dateString: string) {

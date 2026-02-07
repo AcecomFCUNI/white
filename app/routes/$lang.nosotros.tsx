@@ -5,7 +5,6 @@
 
 import { json, type LoaderFunctionArgs, type MetaFunction } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { useTranslation } from 'react-i18next'
 import { validateLang, routeMap } from '~/lib/i18n-routes'
 import { client, getLocalizedValue } from '~/sanity/lib'
 import { TEAM_LEADERSHIP_QUERY, TEAM_MEMBERS_QUERY } from '~/sanity/lib/queries'
@@ -44,11 +43,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export default function NosotrosRoute() {
   const { lang, leadership, members } = useLoaderData<typeof loader>()
-  const { i18n } = useTranslation()
-
-  if (i18n.language !== lang) {
-    i18n.changeLanguage(lang)
-  }
 
   const leadershipMembers = leadership.map((m: {
     name: string
