@@ -15,6 +15,7 @@ import { StarField } from '~/components/effects/StarField'
 import { NebulaOrb } from '~/components/effects/Nebula'
 import { ProductCard } from '~/components/ui/molecules'
 import { validateLang } from '~/lib/i18n-routes'
+import { CONTACT } from '~/lib/constants'
 import type { SanityProduct } from '~/types'
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -42,8 +43,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ]
 }
 
-const WHATSAPP_NUMBER = '519XXXXXXXX' // Replace with actual number
-
 export default function ShopRoute() {
   const { products, lang } = useLoaderData<typeof loader>()
   const { t } = useTranslation()
@@ -52,7 +51,7 @@ export default function ShopRoute() {
     const message = lang === 'en'
       ? `Hello, I'm interested in buying: ${productName} from the Chasqui II project`
       : `Hola, me interesa comprar: ${productName} del proyecto Chasqui II`
-    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+    return `https://wa.me/${CONTACT.phone}?text=${encodeURIComponent(message)}`
   }
 
   return (
