@@ -53,10 +53,20 @@ export const teamMember = defineType({
       },
     }),
     defineField({
-      name: 'bio',
-      title: 'Biography',
-      type: 'localizedText',
-      description: 'Short bio for the team page',
+      name: 'quote',
+      title: 'Motivational Quote',
+      type: 'localizedString',
+      description: 'Short motivational or inspiring phrase (required for leadership)',
+      hidden: ({ document }) => !document?.isLeadership,
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const doc = context.document as { isLeadership?: boolean }
+          const localized = value as { es?: string; en?: string } | undefined
+          if (doc?.isLeadership && (!localized || (!localized.es && !localized.en))) {
+            return 'Leadership members must have a motivational quote'
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'email',

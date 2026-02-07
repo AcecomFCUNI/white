@@ -85,6 +85,13 @@ export const product = defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'showOnHome',
+      title: 'Show on Homepage',
+      type: 'boolean',
+      description: 'Display as hook product in the "Support Us" section (max 3 recommended)',
+      initialValue: false,
+    }),
+    defineField({
       name: 'order',
       title: 'Display Order',
       type: 'number',

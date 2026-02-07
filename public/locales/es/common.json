@@ -80,7 +80,7 @@
       "acecom": { "name": "ACECOM", "description": "Asociación de Computación" },
       "graviit": { "name": "GRAVIIT SPACE", "description": "Aliado estratégico aeroespacial" }
     },
-    "cta": "Tu organizacion quiere ser parte de esta mision?",
+    "cta": "¿Tu organización quiere ser parte de esta misión?",
     "button": "Contactanos"
   },
   "cta": {
@@ -102,8 +102,8 @@
   },
   "contact": {
     "badge": "Contacto",
-    "title": "Tienes preguntas?",
-    "titleHighlight": "Escribenos",
+    "title": "¿Tienes preguntas?",
+    "titleHighlight": "¡Escríbenos!",
     "address": "Direccion",
     "email": "Email",
     "phone": "Telefono",
@@ -138,7 +138,7 @@
     "submit": "Enviar mensaje",
     "sending": "Enviando...",
     "success": {
-      "title": "Mensaje enviado!",
+      "title": "¡Mensaje enviado!",
       "message": "Gracias por contactarnos. Te responderemos pronto.",
       "sendAnother": "Enviar otro mensaje"
     },
@@ -325,7 +325,7 @@
     "subtitle": "Cada compra nos ayuda a financiar el proyecto. Lleva contigo un pedazo de nuestra mision espacial.",
     "buyButton": "Comprar",
     "howToBuy": {
-      "title": "Como comprar?",
+      "title": "¿Cómo comprar?",
       "description": "Haz clic en \"Comprar\" para contactarnos por WhatsApp. Coordinaremos la entrega y el pago contigo directamente. Aceptamos efectivo, Yape y Plin."
     },
     "products": {

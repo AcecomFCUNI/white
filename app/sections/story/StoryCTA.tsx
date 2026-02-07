@@ -3,35 +3,29 @@
  * Call-to-action section with WhatsApp, Merch, and Donations
  */
 
-import { Link } from '@remix-run/react'
 import { FadeInView } from '~/components/animations/FadeInView'
 import { StarField } from '~/components/effects/StarField'
 import { NebulaOrb } from '~/components/effects/Nebula'
 import { GlowText } from '~/components/effects/GlowText'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { useTranslation } from 'react-i18next'
-import { Badge, Card, LinkButton, Heading } from '~/components/ui'
+import { Badge, Card, LinkButton } from '~/components/ui'
+import { ProductCard } from '~/components/ui/molecules'
 import { CONTACT } from '~/lib/constants'
 
-const merchItems = [
-  {
-    name: 'Tazas Chasqui',
-    price: 'S/. 12.00',
-    image: '/assets/img/merch/15.png'
-  },
-  {
-    name: 'Llaveros',
-    price: 'S/. 5.00',
-    image: '/assets/img/merch/16.png'
-  },
-  {
-    name: 'Polos Oficiales',
-    price: 'S/. 50.00',
-    image: '/assets/img/merch/17.png'
-  }
-]
+interface MerchProduct {
+  name: string
+  price: number
+  imageUrl?: string
+  gallery?: string[]
+}
 
-export function StoryCTA () {
+interface StoryCTAProps {
+  products?: MerchProduct[]
+  lang?: string
+}
+
+export function StoryCTA ({ products = [], lang = 'es' }: StoryCTAProps) {
   const { t } = useTranslation()
 
   return (
@@ -119,33 +113,27 @@ export function StoryCTA () {
             </h3>
           </FadeInView>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {merchItems.map((item, index) => (
-              <FadeInView key={item.name} direction="up" delay={index * 0.1}>
-                <Card padding="none" className="group overflow-hidden hover:border-brand/50">
-                  {/* Image placeholder */}
-                  <div className="aspect-square overflow-hidden bg-gray-800">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src =
-                          "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%231f2937' width='200' height='200'/%3E%3Ctext fill='%236b7280' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='sans-serif'%3EImagen%3C/text%3E%3C/svg%3E"
-                      }}
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h4 className="mb-1 font-semibold text-white">{item.name}</h4>
-                    <p className="text-brand">{item.price}</p>
-                  </div>
-                </Card>
-              </FadeInView>
-            ))}
-          </div>
+          {products.length > 0 ? (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              {products.map((product, index) => (
+                <FadeInView key={product.name} direction="up" delay={index * 0.1} className="h-full">
+                  <ProductCard
+                    name={product.name}
+                    price={product.price}
+                    imageUrl={product.imageUrl}
+                    gallery={product.gallery}
+                  />
+                </FadeInView>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-gray-500">
+              {t('cta.noProducts', 'Próximamente productos disponibles')}
+            </p>
+          )}
 
           <FadeInView direction="up" delay={0.3} className="mt-8 text-center">
-            <LinkButton href="/tienda" variant="outline">
+            <LinkButton href={`/${lang}/tienda`} variant="outline">
               {t('cta.exploreShop')}
               <ArrowRightIcon className="h-4 w-4" />
             </LinkButton>

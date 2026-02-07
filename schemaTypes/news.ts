@@ -39,8 +39,17 @@ export const news = defineType({
     defineField({
       name: 'category',
       title: 'Category',
-      type: 'reference',
-      to: [{ type: 'newsCategory' }],
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Lanzamiento', value: 'launch' },
+          { title: 'Evento', value: 'event' },
+          { title: 'Logro', value: 'achievement' },
+          { title: 'Alianza', value: 'partnership' },
+          { title: 'Técnico', value: 'technical' },
+        ],
+        layout: 'dropdown',
+      },
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -83,17 +92,24 @@ export const news = defineType({
   preview: {
     select: {
       title: 'title.es',
-      subtitle: 'category.title.es',
+      category: 'category',
       media: 'image',
       date: 'publishedAt',
     },
-    prepare({ title, subtitle, media, date }) {
+    prepare({ title, category, media, date }) {
+      const categoryLabels: Record<string, string> = {
+        launch: 'Lanzamiento',
+        event: 'Evento',
+        achievement: 'Logro',
+        partnership: 'Alianza',
+        technical: 'Técnico',
+      }
       const formattedDate = date
         ? new Date(date).toLocaleDateString('es-PE')
         : 'Sin fecha'
       return {
         title,
-        subtitle: `${subtitle || 'Sin categoría'} • ${formattedDate}`,
+        subtitle: `${categoryLabels[category] || 'Sin categoría'} • ${formattedDate}`,
         media,
       }
     },

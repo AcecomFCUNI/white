@@ -22,6 +22,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { useTranslation } from 'react-i18next'
 import { Badge } from '~/components/ui'
+import { SubsystemCard } from '~/components/ui/molecules'
 
 const subsystemIds = [
   'payload',
@@ -152,13 +153,18 @@ export function StoryMission () {
 
         {/* Subsystems grid */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-          {subsystemIds.map((subsystemId, index) => (
-            <SubsystemCard
-              key={subsystemId}
-              subsystemId={subsystemId}
-              index={index}
-            />
-          ))}
+          {subsystemIds.map((subsystemId, index) => {
+            const Icon = subsystemIcons[subsystemId]
+            return (
+              <FadeInView key={subsystemId} direction="up" delay={index * 0.05} className="h-full">
+                <SubsystemCard
+                  name={t(`mission.subsystems.${subsystemId}.name`)}
+                  description={t(`mission.subsystems.${subsystemId}.description`)}
+                  icon={Icon}
+                />
+              </FadeInView>
+            )
+          })}
         </div>
       </div>
 
@@ -169,26 +175,3 @@ export function StoryMission () {
   )
 }
 
-interface SubsystemCardProps {
-  subsystemId: typeof subsystemIds[number];
-  index: number;
-}
-
-function SubsystemCard ({ subsystemId, index }: SubsystemCardProps) {
-  const { t } = useTranslation()
-  const Icon = subsystemIcons[subsystemId]
-
-  return (
-    <FadeInView direction="up" delay={index * 0.05} className="h-full">
-      <div className="group flex h-full flex-col rounded-xl border border-white/10 bg-black/40 p-4 backdrop-blur-xl transition-all hover:border-brand/50 hover:bg-black/50">
-        <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-brand/10 transition-colors group-hover:bg-brand/20">
-          <Icon className="h-5 w-5 text-brand" />
-        </div>
-        <h3 className="mb-1 font-montserrat text-sm font-semibold text-white">
-          {t(`mission.subsystems.${subsystemId}.name`)}
-        </h3>
-        <p className="mt-auto text-xs text-gray-300">{t(`mission.subsystems.${subsystemId}.description`)}</p>
-      </div>
-    </FadeInView>
-  )
-}

@@ -37,26 +37,6 @@ export const subsystem = defineType({
       description: 'Detailed description for the subsystem page',
     }),
     defineField({
-      name: 'icon',
-      title: 'Icon Name',
-      type: 'string',
-      description: 'Heroicon name (e.g., "camera", "cpu-chip", "signal")',
-      options: {
-        list: [
-          { title: 'Camera (Payload)', value: 'camera' },
-          { title: 'CPU Chip (Computer)', value: 'cpu-chip' },
-          { title: 'Signal (Communications)', value: 'signal' },
-          { title: 'Fire (Thermal)', value: 'fire' },
-          { title: 'Arrows Pointing Out (Attitude)', value: 'arrows-pointing-out' },
-          { title: 'Building Office (Ground Station)', value: 'building-office-2' },
-          { title: 'Cube (Structure)', value: 'cube' },
-          { title: 'Wrench (Manufacturing)', value: 'wrench-screwdriver' },
-          { title: 'Bolt (Power)', value: 'bolt' },
-          { title: 'Rocket (Propulsion)', value: 'rocket-launch' },
-        ],
-      },
-    }),
-    defineField({
       name: 'details',
       title: 'Technical Details',
       type: 'array',

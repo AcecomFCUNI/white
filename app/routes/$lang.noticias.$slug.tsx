@@ -18,12 +18,13 @@ import { supportedLanguages, type Language } from '~/lib/i18n-routes'
 import { redirect } from '@remix-run/node'
 import { PortableText, type PortableTextComponents, type PortableTextBlock } from '@portabletext/react'
 
-// Types for Sanity news
-interface SanityNewsCategory {
-  _id: string
-  title: { es?: string; en?: string }
-  slug: { current: string }
-  color: 'purple' | 'blue' | 'green' | 'yellow' | 'red'
+// Category config: labels and badge colors
+const categoryConfig: Record<string, { es: string; en: string; color: 'purple' | 'blue' | 'green' | 'yellow' | 'red' }> = {
+  launch: { es: 'Lanzamiento', en: 'Launch', color: 'red' },
+  event: { es: 'Evento', en: 'Event', color: 'blue' },
+  achievement: { es: 'Logro', en: 'Achievement', color: 'green' },
+  partnership: { es: 'Alianza', en: 'Partnership', color: 'purple' },
+  technical: { es: 'Técnico', en: 'Technical', color: 'yellow' },
 }
 
 interface SanityNewsDetail {
@@ -39,7 +40,7 @@ interface SanityNewsDetail {
       url: string
     }
   }
-  category?: SanityNewsCategory
+  category?: string
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -206,13 +207,13 @@ export default function NewsDetailRoute() {
               </Link>
             </FadeInView>
 
-            {article.category && (
+            {article.category && categoryConfig[article.category] && (
               <FadeInView direction="up" delay={0.1}>
                 <Badge
-                  variant={colorToVariant[article.category.color] || 'section'}
+                  variant={colorToVariant[categoryConfig[article.category].color] || 'section'}
                   className="mb-4"
                 >
-                  {getLocalizedValue(article.category.title, lang)}
+                  {categoryConfig[article.category][lang as 'es' | 'en']}
                 </Badge>
               </FadeInView>
             )}

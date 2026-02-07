@@ -12,6 +12,7 @@ export const NEWS_LIST_QUERY = defineQuery(/* groq */ `
     excerpt,
     publishedAt,
     featured,
+    category,
     image {
       asset->{
         _id,
@@ -19,12 +20,6 @@ export const NEWS_LIST_QUERY = defineQuery(/* groq */ `
         metadata { lqip, dimensions }
       },
       alt
-    },
-    category->{
-      _id,
-      title,
-      slug,
-      color
     }
   }
 `)
@@ -36,6 +31,7 @@ export const NEWS_FEATURED_QUERY = defineQuery(/* groq */ `
     slug,
     excerpt,
     publishedAt,
+    category,
     image {
       asset->{
         _id,
@@ -43,12 +39,6 @@ export const NEWS_FEATURED_QUERY = defineQuery(/* groq */ `
         metadata { lqip, dimensions }
       },
       alt
-    },
-    category->{
-      _id,
-      title,
-      slug,
-      color
     }
   }
 `)
@@ -61,6 +51,27 @@ export const NEWS_BY_SLUG_QUERY = defineQuery(/* groq */ `
     excerpt,
     body,
     publishedAt,
+    category,
+    image {
+      asset->{
+        _id,
+        url,
+        metadata { lqip, dimensions }
+      },
+      alt
+    }
+  }
+`)
+
+// ============================================
+// PRODUCTS QUERIES
+// ============================================
+
+export const HOME_PRODUCTS_QUERY = defineQuery(/* groq */ `
+  *[_type == "product" && showOnHome == true] | order(order asc) [0...3] {
+    _id,
+    name,
+    price,
     image {
       asset->{
         _id,
@@ -69,27 +80,16 @@ export const NEWS_BY_SLUG_QUERY = defineQuery(/* groq */ `
       },
       alt
     },
-    category->{
-      _id,
-      title,
-      slug,
-      color
+    gallery[] {
+      asset->{
+        _id,
+        url,
+        metadata { lqip, dimensions }
+      },
+      alt
     }
   }
 `)
-
-export const NEWS_CATEGORIES_QUERY = defineQuery(/* groq */ `
-  *[_type == "newsCategory"] | order(title.es asc) {
-    _id,
-    title,
-    slug,
-    color
-  }
-`)
-
-// ============================================
-// PRODUCTS QUERIES
-// ============================================
 
 export const PRODUCTS_LIST_QUERY = defineQuery(/* groq */ `
   *[_type == "product"] | order(order asc) {
@@ -234,7 +234,6 @@ export const TEAM_LIST_QUERY = defineQuery(/* groq */ `
     slug,
     role,
     area,
-    bio,
     isLeadership,
     photo {
       asset->{
@@ -253,8 +252,7 @@ export const TEAM_LEADERSHIP_QUERY = defineQuery(/* groq */ `
     name,
     slug,
     role,
-    area,
-    bio,
+    quote,
     photo {
       asset->{
         _id,
@@ -262,17 +260,17 @@ export const TEAM_LEADERSHIP_QUERY = defineQuery(/* groq */ `
         metadata { lqip, dimensions }
       }
     },
+    email,
     linkedin
   }
 `)
 
-export const TEAM_BY_AREA_QUERY = defineQuery(/* groq */ `
-  *[_type == "teamMember" && area == $area] | order(order asc) {
+export const TEAM_MEMBERS_QUERY = defineQuery(/* groq */ `
+  *[_type == "teamMember" && isLeadership != true] | order(area asc, order asc) {
     _id,
     name,
-    slug,
     role,
-    bio,
+    area,
     photo {
       asset->{
         _id,

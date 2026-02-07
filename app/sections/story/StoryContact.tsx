@@ -51,50 +51,50 @@ export function StoryContact () {
       {/* Contact section */}
       <div className="relative z-10 py-32">
         <div className="mx-auto max-w-6xl px-4">
-          <div className="grid gap-12 md:grid-cols-2">
-            {/* Contact info */}
-            <div>
-              <div className="text-center md:text-left">
-                <FadeInView direction="up">
-                  <Badge className="mb-4">{t('contact.badge')}</Badge>
-                </FadeInView>
-                <FadeInView direction="up" delay={0.1}>
-                  <h2 className="mb-8 font-montserrat text-3xl font-bold text-white md:text-4xl">
-                    {t('contact.title')}
-                    <br />
-                    <span className="text-brand">{t('contact.titleHighlight')}</span>
-                  </h2>
-                </FadeInView>
-              </div>
+          {/* Title */}
+          <div className="mb-12 text-center">
+            <FadeInView direction="up">
+              <Badge className="mb-4">{t('contact.badge')}</Badge>
+            </FadeInView>
+            <FadeInView direction="up" delay={0.1}>
+              <h2 className="font-montserrat text-3xl font-bold text-white md:text-4xl">
+                {t('contact.title')}
+                <br />
+                <span className="text-brand">{t('contact.titleHighlight')}</span>
+              </h2>
+            </FadeInView>
+          </div>
 
-              <div className="space-y-6">
-                <FadeInView direction="up" delay={0.2}>
-                  <ContactItem
-                    icon={MapPinIcon}
-                    title={t('contact.address')}
-                    content="Av. Túpac Amaru 210, Rímac, Lima, Perú"
-                    href="https://maps.google.com/?q=Universidad+Nacional+de+Ingenieria+Peru"
-                  />
-                </FadeInView>
+          {/* Data + Map */}
+          <div className="grid items-center gap-12 md:grid-cols-2">
+            {/* Contact data */}
+            <div className="space-y-6">
+              <FadeInView direction="up" delay={0.2}>
+                <ContactItem
+                  icon={MapPinIcon}
+                  title={t('contact.address')}
+                  content="Av. Túpac Amaru 210, Rímac, Lima, Perú"
+                  href="https://maps.google.com/?q=Universidad+Nacional+de+Ingenieria+Peru"
+                />
+              </FadeInView>
 
-                <FadeInView direction="up" delay={0.3}>
-                  <ContactItem
-                    icon={EnvelopeIcon}
-                    title={t('contact.email')}
-                    content={CONTACT.email}
-                    href={`mailto:${CONTACT.email}`}
-                  />
-                </FadeInView>
+              <FadeInView direction="up" delay={0.3}>
+                <ContactItem
+                  icon={EnvelopeIcon}
+                  title={t('contact.email')}
+                  content={CONTACT.email}
+                  href={`mailto:${CONTACT.email}`}
+                />
+              </FadeInView>
 
-                <FadeInView direction="up" delay={0.4}>
-                  <ContactItem
-                    icon={PhoneIcon}
-                    title={t('contact.phone')}
-                    content={CONTACT.phone.replace(/(\d{2})(\d{3})(\d{3})(\d{3})/, '+$1 $2 $3 $4')}
-                    href={`tel:${CONTACT.phone}`}
-                  />
-                </FadeInView>
-              </div>
+              <FadeInView direction="up" delay={0.4}>
+                <ContactItem
+                  icon={PhoneIcon}
+                  title={t('contact.phone')}
+                  content={CONTACT.phone.replace(/(\d{2})(\d{3})(\d{3})(\d{3})/, '+$1 $2 $3 $4')}
+                  href={`tel:${CONTACT.phone}`}
+                />
+              </FadeInView>
             </div>
 
             {/* Map */}
@@ -109,7 +109,7 @@ export function StoryContact () {
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   title="Ubicación UNI"
-                  className="grayscale"
+                  className="invert hue-rotate-180 brightness-95 contrast-90"
                 />
               </div>
             </FadeInView>

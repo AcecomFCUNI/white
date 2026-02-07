@@ -16,3 +16,5 @@ export { EmptyState, type EmptyStateProps, type EmptyStateAction } from './Empty
 export { Pagination, type PaginationProps } from './Pagination'
 export { ProductCard } from './ProductCard'
 export { NewsCard } from './NewsCard'
+export { SubsystemCard } from './SubsystemCard'
+export { TeamMemberCard } from './TeamMemberCard'

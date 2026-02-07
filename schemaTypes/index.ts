@@ -1,7 +1,5 @@
 import { news } from './news'
-import { newsCategory } from './newsCategory'
 import { product } from './product'
-import { subsystem } from './subsystem'
 import { partner } from './partner'
 import { teamMember } from './teamMember'
 import { localizedString, localizedText, localizedRichText } from './objects/localized'
@@ -9,9 +7,7 @@ import { localizedString, localizedText, localizedRichText } from './objects/loc
 export const schemaTypes = [
   // Documents
   news,
-  newsCategory,
   product,
-  subsystem,
   partner,
   teamMember,
   // Objects
