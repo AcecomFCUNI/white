@@ -1,13 +1,16 @@
 /**
  * FadeInView component
  * Animates children when they enter the viewport using CSS transitions.
- * Zero JS animation library dependency — uses IntersectionObserver.
+ * Zero JS animation library dependency — uses IntersectionObserver + direct DOM.
  *
- * Respects user's prefers-reduced-motion setting:
- * - When reduced motion is enabled, content appears instantly
+ * SSR-safe: renders visible content on the server. Animations are applied
+ * purely on the client via DOM manipulation (no React state for visibility),
+ * avoiding hydration mismatches and race conditions.
+ *
+ * Respects user's prefers-reduced-motion setting.
  */
 
-import { useRef, useEffect, useState, type ReactNode, createElement } from 'react'
+import { useRef, useEffect, type ReactNode, createElement } from 'react'
 import { cn } from '~/lib/utils'
 import { useReducedMotion } from '~/hooks'
 
@@ -25,25 +28,15 @@ interface FadeInViewProps {
   as?: string;
 }
 
-const getInitialStyles = (direction: Direction, distance: number): React.CSSProperties => {
+function getTransform (direction: Direction, distance: number): string {
   switch (direction) {
-    case 'up':
-      return { opacity: 0, transform: `translateY(${distance}px)` }
-    case 'down':
-      return { opacity: 0, transform: `translateY(-${distance}px)` }
-    case 'left':
-      return { opacity: 0, transform: `translateX(${distance}px)` }
-    case 'right':
-      return { opacity: 0, transform: `translateX(-${distance}px)` }
+    case 'up': return `translateY(${distance}px)`
+    case 'down': return `translateY(-${distance}px)`
+    case 'left': return `translateX(${distance}px)`
+    case 'right': return `translateX(-${distance}px)`
     case 'none':
-    default:
-      return { opacity: 0 }
+    default: return 'none'
   }
-}
-
-const visibleStyles: React.CSSProperties = {
-  opacity: 1,
-  transform: 'translate(0)',
 }
 
 export function FadeInView ({
@@ -59,43 +52,42 @@ export function FadeInView ({
 }: FadeInViewProps) {
   const prefersReducedMotion = useReducedMotion()
   const ref = useRef<HTMLElement>(null)
-  const [isMounted, setIsMounted] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
-
-  // Hide elements only after client hydration to avoid invisible content on SSR
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
 
   useEffect(() => {
     const el = ref.current
-    if (!el || !isMounted || prefersReducedMotion) return
+    if (!el || prefersReducedMotion) return
+
+    // Apply initial hidden state via DOM (not React state)
+    el.style.opacity = '0'
+    el.style.transform = getTransform(direction, distance)
+    el.style.transition = `opacity ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1) ${delay}s, transform ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1) ${delay}s`
+    el.style.willChange = 'opacity, transform'
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true)
+          el.style.opacity = '1'
+          el.style.transform = 'translate(0)'
+          el.style.willChange = 'auto'
           if (once) observer.unobserve(el)
         } else if (!once) {
-          setIsVisible(false)
+          el.style.opacity = '0'
+          el.style.transform = getTransform(direction, distance)
+          el.style.willChange = 'opacity, transform'
         }
       },
       { threshold }
     )
 
     observer.observe(el)
-    return () => observer.disconnect()
-  }, [once, threshold, prefersReducedMotion, isMounted])
+    return () => {
+      observer.disconnect()
+      el.style.opacity = ''
+      el.style.transform = ''
+      el.style.transition = ''
+      el.style.willChange = ''
+    }
+  }, [direction, delay, duration, distance, once, threshold, prefersReducedMotion])
 
-  if (prefersReducedMotion || !isMounted) {
-    return createElement(Tag, { ref, className: cn(className) }, children)
-  }
-
-  const style: React.CSSProperties = {
-    ...(isVisible ? visibleStyles : getInitialStyles(direction, distance)),
-    transition: `opacity ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1) ${delay}s, transform ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1) ${delay}s`,
-    willChange: isVisible ? 'auto' : 'opacity, transform',
-  }
-
-  return createElement(Tag, { ref, className: cn(className), style }, children)
+  return createElement(Tag, { ref, className: cn(className) }, children)
 }

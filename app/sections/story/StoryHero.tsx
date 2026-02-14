@@ -3,7 +3,7 @@
  * Full-screen hero with animated starfield and logo reveal
  */
 
-import { lazy, Suspense, useRef } from 'react'
+import { lazy, Suspense, useEffect, useRef } from 'react'
 import { m, useScroll, useTransform } from 'motion/react'
 import { StarField } from '~/components/effects/StarField'
 import { Nebula } from '~/components/effects/Nebula'
@@ -19,6 +19,7 @@ const GlobeCap = lazy(() =>
 export function StoryHero () {
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start']
@@ -27,6 +28,20 @@ export function StoryHero () {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9])
   const y = useTransform(scrollYProgress, [0, 0.5], [0, 100])
+
+  // Apply scroll parallax via DOM to avoid SSR/LazyMotion hydration issues
+  useEffect(() => {
+    const el = contentRef.current
+    if (!el) return
+
+    const unsubscribers = [
+      opacity.on('change', (v) => { el.style.opacity = String(v) }),
+      scale.on('change', (v) => { el.style.scale = String(v) }),
+      y.on('change', (v) => { el.style.transform = `translateY(${v}px)` }),
+    ]
+
+    return () => unsubscribers.forEach((unsub) => unsub())
+  }, [opacity, scale, y])
 
   return (
     <section
@@ -39,10 +54,10 @@ export function StoryHero () {
         <Nebula variant="red" animated />
       </div>
 
-      {/* Content */}
-      <m.div
+      {/* Content — uses DOM-driven scroll parallax instead of m.div to avoid SSR issues */}
+      <div
+        ref={contentRef}
         className="relative z-10 flex h-full flex-col items-center justify-center px-4"
-        style={{ opacity, scale, y }}
       >
         {/* Logo */}
         <FadeInView direction="none" duration={1} delay={0.2}>
@@ -80,7 +95,7 @@ export function StoryHero () {
             <ChevronDownIcon className="h-6 w-6" />
           </m.div>
         </FadeInView>
-      </m.div>
+      </div>
 
       {/* Earth arc at bottom - Mobile: simple gradient, Desktop: full globe */}
       {/* Mobile Earth arc - simple gradient effect */}
