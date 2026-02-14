@@ -59,11 +59,17 @@ export function FadeInView ({
 }: FadeInViewProps) {
   const prefersReducedMotion = useReducedMotion()
   const ref = useRef<HTMLElement>(null)
+  const [isMounted, setIsMounted] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+
+  // Hide elements only after client hydration to avoid invisible content on SSR
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   useEffect(() => {
     const el = ref.current
-    if (!el || prefersReducedMotion) return
+    if (!el || !isMounted || prefersReducedMotion) return
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -79,10 +85,10 @@ export function FadeInView ({
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [once, threshold, prefersReducedMotion])
+  }, [once, threshold, prefersReducedMotion, isMounted])
 
-  if (prefersReducedMotion) {
-    return createElement(Tag, { className }, children)
+  if (prefersReducedMotion || !isMounted) {
+    return createElement(Tag, { ref, className: cn(className) }, children)
   }
 
   const style: React.CSSProperties = {
