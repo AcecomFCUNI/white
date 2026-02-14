@@ -11,9 +11,12 @@ export const CONTACT = {
   email: 'contacto@chasqui2.pe',
   phone: '+51999999999', // TODO: Reemplazar
   whatsappGroup: 'https://chat.whatsapp.com/REPLACE_BEFORE_PROD', // TODO: Reemplazar
-  instagram: 'https://www.instagram.com/chasqui2_unsa/',
-  linkedin: 'https://www.linkedin.com/company/chasqui-ii',
-  facebook: 'https://www.facebook.com/chasqui2unsa',
+  instagram: 'https://www.instagram.com/chasqui.ll.peru/',
+  linkedin: 'https://www.linkedin.com/company/chasqui-2/',
+  facebook: 'https://www.facebook.com/CHASQUI2UNI/',
+  youtube: 'https://www.youtube.com/@chasqui2peru',
+  tiktok: 'https://www.tiktok.com/@chasqui2peru',
+  kick: 'https://kick.com/chasqui2peru',
 } as const
 
 // Site Configuration
